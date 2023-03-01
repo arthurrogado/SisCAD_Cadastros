@@ -6,7 +6,9 @@
     $descricao = filter_input(INPUT_POST, 'descricao');
     $coordenador = filter_input(INPUT_POST, 'coordenador');
     
-
+    if(empty($nome) || empty($descricao) || empty($coordenador)) {
+        $status = 'Failed';
+    } else {
         require('../db.php');
         $reg = $conn->prepare("INSERT INTO cursos (nome, descricao, coordenador) VALUES (:nome, :descricao, :coordenador);");
         $reg->bindValue(':nome', $nome);
@@ -17,6 +19,7 @@
         } else {
             $status = 'Failed';
         }
+    }
     
     
     $response = array('status' => $status);

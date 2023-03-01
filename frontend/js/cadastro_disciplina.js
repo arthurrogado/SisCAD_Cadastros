@@ -7,7 +7,7 @@ form.addEventListener('submit', (event) => {
 	
 	const formData = new FormData(form);
 
-	fetch('../../backend/cadastro_curso.php', {
+	fetch('../../backend/cadastro_disciplina.php', {
 		method: 'POST',
 		body: formData
 	})

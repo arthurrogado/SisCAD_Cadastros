@@ -1,0 +1,29 @@
+<meta charset="UTF-8">
+
+
+<form method="POST" id="form-cadastro">
+    <div>
+        <label class="placeholder">Nome da Disciplina</label>
+        <input type="text" name="nome" required>
+    </div>
+    <div>
+        <label class="placeholder">Carga Horária</label>
+        <input type="number" name="carga_horaria" required>
+    </div>
+    <div>
+        <label class="placeholder">Ementa</label>
+        <textarea name="ementa" cols="30" rows="5" required></textarea>
+    </div>
+    <div>
+        <label class="placeholder">Bibliografia</label>
+        <textarea name="bibliografia" cols="30" rows="5" required></textarea>
+    </div>
+    <div>
+        <label class="placeholder">Pré-requisito</label>
+        <input type="text" name="pre_requisito" required>
+    </div>
+    <!-- <button id="btn_register">Registrar</button> -->
+    <input type="submit" name="registrar" value="Registrar">
+</form>
+
+<script src="../js/cadastro_disciplina.js"></script>
