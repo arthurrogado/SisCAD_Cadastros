@@ -27,6 +27,7 @@ form.addEventListener('submit', (event) => {
 		}
 	})
 	.catch(error => {
-	// Tratar erros de conexão ou resposta inválida
+		// Tratar erros de conexão ou resposta inválida
+		console.log(error)
 	});
 });
