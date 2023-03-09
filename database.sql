@@ -19,35 +19,41 @@
 CREATE DATABASE IF NOT EXISTS `siscad` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci */;
 USE `siscad`;
 
--- Copiando estrutura para view siscad.cursos
--- Criando tabela temporária para evitar erros de dependência de VIEW
-CREATE TABLE `cursos` (
-	`id` INT(11) NOT NULL,
-	`nome` VARCHAR(50) NOT NULL COLLATE 'utf8_general_ci',
-	`descricao` VARCHAR(255) NULL COLLATE 'utf8_general_ci',
-	`coordenador` INT(11) NULL
-) ENGINE=MyISAM;
+-- Copiando estrutura para tabela siscad.alunos
+CREATE TABLE IF NOT EXISTS `alunos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) DEFAULT NULL,
+  `endereco` varchar(255) DEFAULT NULL,
+  `telefone` varchar(50) DEFAULT NULL,
+  `curso` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- Copiando estrutura para view siscad.disciplinas
--- Criando tabela temporária para evitar erros de dependência de VIEW
-CREATE TABLE `disciplinas` (
-	`id` INT(11) NOT NULL,
-	`nome` VARCHAR(255) NULL COLLATE 'utf8_general_ci',
-	`carga_horaria` DOUBLE NULL,
-	`ementa` VARCHAR(255) NULL COLLATE 'utf8_general_ci',
-	`bibliografia` VARCHAR(255) NULL COLLATE 'utf8_general_ci',
-	`pre_requisito` VARCHAR(255) NULL COLLATE 'utf8_general_ci'
-) ENGINE=MyISAM;
+-- Exportação de dados foi desmarcado.
 
--- Copiando estrutura para view siscad.cursos
--- Removendo tabela temporária e criando a estrutura VIEW final
-DROP TABLE IF EXISTS `cursos`;
-;
+-- Copiando estrutura para tabela siscad.cursos
+CREATE TABLE IF NOT EXISTS `cursos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(50) NOT NULL,
+  `descricao` varchar(255) DEFAULT NULL,
+  `coordenador` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- Copiando estrutura para view siscad.disciplinas
--- Removendo tabela temporária e criando a estrutura VIEW final
-DROP TABLE IF EXISTS `disciplinas`;
-;
+-- Exportação de dados foi desmarcado.
+
+-- Copiando estrutura para tabela siscad.disciplinas
+CREATE TABLE IF NOT EXISTS `disciplinas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) DEFAULT NULL,
+  `carga_horaria` double DEFAULT NULL,
+  `ementa` varchar(255) DEFAULT NULL,
+  `bibliografia` varchar(255) DEFAULT NULL,
+  `pre_requisito` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- Exportação de dados foi desmarcado.
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
