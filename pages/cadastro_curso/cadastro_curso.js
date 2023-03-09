@@ -1,4 +1,3 @@
-
 const btn_register = document.querySelector('#btn_register')
 const form = document.querySelector('#form-cadastro');
 
@@ -7,9 +6,9 @@ form.addEventListener('submit', (event) => {
 	
 	const formData = new FormData(form);
 
-	fetch('../../backend/cadastro_curso.php', {
+	fetch('./cadastro_curso.php', {
 		method: 'POST',
-		body: formData
+		body: formData,
 	})
 	.then(response => response.json())
 	.then(data => {
