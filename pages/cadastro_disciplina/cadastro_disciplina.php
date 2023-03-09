@@ -7,7 +7,7 @@
     if(empty($nome)) {
         $status = 'Failed';
     } else {
-        require('../db.php');
+        require('../../db/db.php');
 
         $carga_horaria = filter_input(INPUT_POST, 'carga_horaria');
         $ementa = filter_input(INPUT_POST, 'ementa');

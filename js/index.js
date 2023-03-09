@@ -28,12 +28,9 @@ for(let menu of menus) {
             contentField.style.height = contentField.contentWindow.document.body.scrollHeight + 'px';
         })
 
-        /* fetch(pageToOpen)
-        .then((res) => res.text())
-        .then(data => {
-            document.querySelector('#contentData').innerHTML = data
-
-        }) */
-
+        contentField.addEventListener('resize', () => {
+            contentField.style.height = contentField.contentWindow.document.body.scrollHeight + 'px';
+        })
+        
     })
 }

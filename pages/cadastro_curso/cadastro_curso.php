@@ -11,7 +11,7 @@
     } else {
         try {
             //code...
-            require('../../php/db.php');
+            require('../../db/db.php');
             $reg = $conn->prepare("INSERT INTO cursos (nome, descricao, coordenador) VALUES (:nome, :descricao, :coordenador);");
             $reg->bindValue(':nome', $nome);
             $reg->bindValue(':descricao', $descricao);

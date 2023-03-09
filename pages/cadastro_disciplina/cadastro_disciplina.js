@@ -7,7 +7,7 @@ form.addEventListener('submit', (event) => {
 	
 	const formData = new FormData(form);
 
-	fetch('../../backend/cadastro_disciplina.php', {
+	fetch('./cadastro_disciplina.php', {
 		method: 'POST',
 		body: formData
 	})
@@ -17,10 +17,11 @@ form.addEventListener('submit', (event) => {
 		console.log(data)
 		if(data.status === "Success") {
 			alert('Cadastrado com sucesso!')
+			// Clear the fields
 			const form = document.getElementById('form-cadastro')
 			for (let i = 0; i < form.elements.length; i++) {
 				const element = form.elements[i];
-				if (element.type === 'text' || element.tagName === 'TEXTAREA') {
+				if (element.type === 'text' || element.type === 'number' || element.tagName === 'TEXTAREA') {
 					element.value = '';
 				}
 			}
