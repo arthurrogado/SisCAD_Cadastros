@@ -4,10 +4,11 @@ const menus = menuItems.children
 for(let menu of menus) {
     menu.addEventListener('click', (e) => {
         const target = e.target
+        // Verify if the item is an <li>
+        if(target.tagName !== "LI") {return}
+
         // Verify if the menu is not active yet. It it is, ignore
-        if(target.classList.contains('active')){
-            return
-        }
+        if(target.classList.contains('active')){return}
 
         // If already exists any .active item, if not, make the new one.
         try {
