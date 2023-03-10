@@ -7,7 +7,90 @@ button, input[type="button"], input[type="submit"], input[type="reset"] {
     outline: inherit;
 }
 
+input[type="submit"] {
+    background-color: rgb(10, 107, 172);
+    color: white;
+    padding: 10px;
+    display: block;
+    width: 100%;
+}
+
 iframe {
     border: 1px solid red;
     width: 100%;
+}
+
+.form {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.form > * {
+    flex-basis: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+/* os filhos diretos do input-group */
+.form > * > * {
+    flex-basis: 100%;
+    margin: 5px 0;
+}
+
+@media (max-width:768px) {
+    .form > * {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 768px) {
+    .form {
+        flex-wrap: wrap;
+    }
+
+    .form > * {
+        flex-basis: 100%;
+    }
+}
+
+
+
+
+
+.input-field {
+    position: relative;
+    padding: 10px;
+}
+
+.input-field label {
+    position: absolute;
+    left: 15px;
+    top: 20px;
+    opacity: .5;
+    pointer-events: none;
+    transition: .3s;
+}
+
+.input-field input {
+    width: 100%;
+    height: 2.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.input-field textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.input-field input:valid ~ label,
+.input-field input:focus ~ label,
+.input-field textarea:valid ~ label,
+.input-field textarea:focus ~ label {
+    bottom: 50px;
+    font-size: 0.7em;
+    color: blue;
+    transform: translateY(-25px);
+    opacity: 1;
 }

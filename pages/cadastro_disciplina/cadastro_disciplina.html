@@ -1,26 +1,33 @@
 <meta charset="UTF-8">
+<link rel="stylesheet" href="../../css/style.css">
 
+<form class="form" method="POST" id="form-cadastro">
+    
+    <div class="input-group">
+        <div class="input-field">
+            <input type="text" name="nome" required>
+            <label class="placeholder">Nome da Disciplina</label>
+        </div>
+        <div class="input-field">
+            <input type="number" name="carga_horaria" required>
+            <label class="placeholder">Carga Horária</label>
+        </div>
+    </div>
 
-<form method="POST" id="form-cadastro">
-    <div>
-        <label class="placeholder">Nome da Disciplina</label>
-        <input type="text" name="nome" required>
+    <div class="input-group">
+        <div class="input-field">
+            <textarea name="ementa" cols="30" rows="5" required></textarea>
+            <label class="placeholder">Ementa</label>
+        </div>
+        <div class="input-field">
+            <textarea name="bibliografia" cols="30" rows="5" required></textarea>
+            <label class="placeholder">Bibliografia</label>
+        </div>
     </div>
-    <div>
-        <label class="placeholder">Carga Horária</label>
-        <input type="number" name="carga_horaria" required>
-    </div>
-    <div>
-        <label class="placeholder">Ementa</label>
-        <textarea name="ementa" cols="30" rows="5" required></textarea>
-    </div>
-    <div>
-        <label class="placeholder">Bibliografia</label>
-        <textarea name="bibliografia" cols="30" rows="5" required></textarea>
-    </div>
-    <div>
-        <label class="placeholder">Pré-requisito</label>
+
+    <div class="input-field">
         <input type="text" name="pre_requisito" required>
+        <label class="placeholder">Pré-requisito</label>
     </div>
     <!-- <button id="btn_register">Registrar</button> -->
     <input type="submit" name="registrar" value="Registrar">
