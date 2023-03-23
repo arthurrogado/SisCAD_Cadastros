@@ -1,16 +1,22 @@
 <meta charset="UTF-8">
-<form method="POST" id="form-cadastro">
-    <div>
-        <label class="placeholder">Nome do Curso</label>
-        <input type="text" name="nome" required>
+<link rel="stylesheet" href="../../css/style.css">
+
+<form class="form" method="POST" id="form-cadastro">
+
+    <div class="input-group">
+        <div class="input-field">
+            <input type="text" name="nome" required>
+            <label class="placeholder">Nome do Curso</label>
+        </div>
+        <div class="input-field">
+            <input type="text" name="coordenador" required>
+            <label class="placeholder">Código coordenador</label>
+        </div>
     </div>
-    <div>
-        <label class="placeholder">Descrição</label>
+
+    <div class="input-field">
         <textarea name="descricao" cols="30" rows="5" required></textarea>
-    </div>
-    <div>
-        <label class="placeholder">Código coordenador</label>
-        <input type="text" name="coordenador" required>
+        <label class="placeholder">Descrição</label>
     </div>
     <!-- <button id="btn_register">Registrar</button> -->
     <input type="submit" name="registrar" value="Registrar">

@@ -16,22 +16,20 @@ for(let menu of menus) {
             activeItem.classList.remove('active')
         } catch (error) {
         }
-
         let newActive = e.target
         newActive.classList.add('active')
 
+        
         let pageToOpen = `pages/${target.id}/${target.id}.html`
 
         contentField = document.querySelector('#contentData')
         contentField.src = pageToOpen
 
-        contentField.addEventListener('load', () => {
+        /* contentField.addEventListener('load', () => {
+            console.log('ALTERADO')
             contentField.style.height = contentField.contentWindow.document.body.scrollHeight + 'px';
-        })
+        }) */
 
-        contentField.addEventListener('resize', () => {
-            contentField.style.height = contentField.contentWindow.document.body.scrollHeight + 'px';
-        })
         
     })
 }

@@ -1,7 +1,5 @@
 <?php
 
-    $registrar = filter_input(INPUT_POST, 'registrar');
-
     $nome = filter_input(INPUT_POST, 'nome');
 
     if(empty($nome)) {
@@ -21,14 +19,16 @@
         $reg->bindValue(':bibliografia', $bibliografia);
         $reg->bindValue(':pre_requisito', $pre_requisito);
         if($reg->execute()) {
-            $status = 'Success';
+            $status = '201';
+            $message = 'Cadastro relizado com sucesso!';
         } else {
             $status = 'Failed';
+            $message = 'Houve alguma falha com o banco de dados!';
         }
     }
     
     
-    $response = array('status' => $status);
+    $response = array('status' => $status, 'message' => $message);
     echo json_encode($response);
     
 ?>

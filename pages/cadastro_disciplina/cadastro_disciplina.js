@@ -14,11 +14,9 @@ form.addEventListener('submit', (event) => {
 	.then(response => response.json())
 	.then(data => {
 		// Tratar a resposta do backend
-		console.log(data)
-		if(data.status === "Success") {
-			alert('Cadastrado com sucesso!')
-			// Clear the fields
-			const form = document.getElementById('form-cadastro')
+		if(data.status === "201") {
+			alert(data.message)
+			// Limpar os campos
 			for (let i = 0; i < form.elements.length; i++) {
 				const element = form.elements[i];
 				if (element.type === 'text' || element.type === 'number' || element.tagName === 'TEXTAREA') {
