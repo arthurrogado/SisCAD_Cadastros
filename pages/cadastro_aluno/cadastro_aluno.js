@@ -12,5 +12,13 @@ window.addEventListener('load', () => {
     })
 })
 
+const tel = document.querySelector('#telefone')
+console.log(tel)
+tel.addEventListener('input', (e) => {
+    const telefone = e.target.value.replace(/\D/g, '');
+    e.target.value = telefone.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+})
 
-const cadastrarAluno = new HttpClient('./cadastro_aluno1.php')
+
+const cadastrarAluno = new HttpClient('./cadastro_aluno.php')
+cadastrarAluno.registerListener()

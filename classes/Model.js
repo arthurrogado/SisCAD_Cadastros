@@ -3,7 +3,7 @@ class HttpClient {
         this.baseUrl = baseUrl
     }
 
-    registerListener(url) {
+    registerListener(url = this.baseUrl) {
         this.form = document.querySelector('#form-cadastro')
         this.form.addEventListener('submit', (e)=>{
             e.preventDefault()
@@ -31,7 +31,7 @@ class HttpClient {
         })
     }
 
-    getAll(url) {
+    placeAll(url) {
         const tableBody = document.querySelector('tbody');
         fetch(url)
         .then(response => response.json())
