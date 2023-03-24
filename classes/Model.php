@@ -33,10 +33,27 @@
             }
 
             return array('status' => $status, 'message' => $message);
-
         }
 
-        
+        public function insertEcho($table, $data) {
+            echo json_encode($this->insert($table, $data));
+        }
+
+        public function echoError($message) {
+            echo json_encode(array('status' => 'Failed', 'message' => $message));
+        }
+
+        public function getAll($table) {
+            $sql = "SELECT * FROM $table;";
+            $query = $this->conn->prepare($sql);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
+            return $result;
+        }
+
+        public function echoAll($table) {
+            echo json_encode($this->getAll($table));
+        }
 
     }
 

@@ -1,17 +1,4 @@
-const tableBody = document.querySelector('tbody')
+import HttpClient from "../../classes/Model.js";
 
-fetch('./listagem_disciplinas.php')
-.then(response => response.json())
-.then(data => {
-    console.log(data)
-    data.forEach(disciplina => {
-        let newLine = `<tr>
-            <td>${disciplina.nome} </td>
-            <td>${disciplina.carga_horaria} </td>
-            <td>${disciplina.ementa} </td>
-            <td>${disciplina.bibliografia} </td>
-            <td>${disciplina.pre_requisito} </td>
-        </tr>`
-        tableBody.innerHTML += newLine
-    });
-})
+const listagemDisciplinas = new HttpClient('./listagem_disciplinas.php')
+listagemDisciplinas.getAll('./listagem_disciplinas.php')
