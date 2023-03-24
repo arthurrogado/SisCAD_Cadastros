@@ -15,12 +15,8 @@ form.addEventListener('submit', (e) => {
     e.preventDefault()
 
     const formData = new FormData(form)
-
-    formData.forEach((e) => {
-        console.log(e)
-    })
     
-    fetch('./cadastro_aluno.php', {
+    fetch('./cadastro_aluno1.php', {
         method: 'POST',
         body: formData
     })

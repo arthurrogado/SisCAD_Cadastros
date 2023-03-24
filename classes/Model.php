@@ -6,7 +6,7 @@
 
         //Construtor database
         public function __construct() {
-            require('../db/db.php');
+            require(dirname(__DIR__).'/db/db.php');
             $this->conn = $conn;
         }
 
