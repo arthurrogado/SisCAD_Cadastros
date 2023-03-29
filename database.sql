@@ -22,14 +22,20 @@ USE `siscad`;
 -- Copiando estrutura para tabela siscad.alunos
 CREATE TABLE IF NOT EXISTS `alunos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(255) DEFAULT NULL,
+  `nome` varchar(255) NOT NULL,
   `endereco` varchar(255) DEFAULT NULL,
   `telefone` varchar(50) DEFAULT NULL,
   `curso` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  PRIMARY KEY (`id`),
+  KEY `alunos_ibfk_1` (`curso`),
+  CONSTRAINT `alunos_ibfk_1` FOREIGN KEY (`curso`) REFERENCES `cursos` (`id`) ON DELETE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- Exportação de dados foi desmarcado.
+-- Copiando dados para a tabela siscad.alunos: ~2 rows (aproximadamente)
+INSERT INTO `alunos` (`id`, `nome`, `endereco`, `telefone`, `curso`) VALUES
+	(28, 'Arthur Rogado Reis', 'Rua 10, n13 Bairro São Sebastião, Uruaçu-GO', '(62) 99151-4140', 7),
+	(29, 'LUCAS BAIA DA LUZ ', 'rua2323', '(62) 99264-9258', 7),
+	(30, 'Marcos', 'Rua nada', '(12) 34567-8969', 7);
 
 -- Copiando estrutura para tabela siscad.cursos
 CREATE TABLE IF NOT EXISTS `cursos` (
@@ -38,9 +44,12 @@ CREATE TABLE IF NOT EXISTS `cursos` (
   `descricao` varchar(255) DEFAULT NULL,
   `coordenador` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- Exportação de dados foi desmarcado.
+-- Copiando dados para a tabela siscad.cursos: ~2 rows (aproximadamente)
+INSERT INTO `cursos` (`id`, `nome`, `descricao`, `coordenador`) VALUES
+	(7, 'ADS - Análise e Desenvolvimento de Sistemas', 'Fazer programa :)', 123),
+	(8, 'Engenharia Civil', 'Fazer cimento', 123);
 
 -- Copiando estrutura para tabela siscad.disciplinas
 CREATE TABLE IF NOT EXISTS `disciplinas` (
@@ -51,9 +60,38 @@ CREATE TABLE IF NOT EXISTS `disciplinas` (
   `bibliografia` varchar(255) DEFAULT NULL,
   `pre_requisito` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- Copiando dados para a tabela siscad.disciplinas: ~1 rows (aproximadamente)
+INSERT INTO `disciplinas` (`id`, `nome`, `carga_horaria`, `ementa`, `bibliografia`, `pre_requisito`) VALUES
+	(26, 'Projeto Integrador', 34, 'Integrar conhecimentos do curso.', 'PHP e Javascript', 'Web II');
+
+-- Copiando estrutura para tabela siscad.professores
+CREATE TABLE IF NOT EXISTS `professores` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) DEFAULT NULL,
+  `endereco` varchar(255) DEFAULT NULL,
+  `telefone` varchar(50) DEFAULT NULL,
+  `titulacao` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- Exportação de dados foi desmarcado.
+-- Copiando dados para a tabela siscad.professores: ~0 rows (aproximadamente)
+INSERT INTO `professores` (`id`, `nome`, `endereco`, `telefone`, `titulacao`) VALUES
+	(2, 'Lynwood', 'Rua x', '(61) 61616-1616', 'Doutor');
+
+-- Copiando estrutura para tabela siscad.professores_cursos
+CREATE TABLE IF NOT EXISTS `professores_cursos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_curso` int(11) DEFAULT NULL,
+  `id_professor` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- Copiando dados para a tabela siscad.professores_cursos: ~0 rows (aproximadamente)
+INSERT INTO `professores_cursos` (`id`, `id_curso`, `id_professor`) VALUES
+	(1, 7, 2),
+	(2, 8, 2);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
