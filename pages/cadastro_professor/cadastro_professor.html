@@ -1,0 +1,43 @@
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../../css/style.css">
+
+<form id="form-cadastro" method="POST">
+
+    <div class="input-group">
+        <div class="input-field">
+            <input type="text" name="nome" required>
+            <label class="placeholder">Nome do professor</label>
+        </div>
+        <div class="input-field">
+            <input type="text" name="endereco" required>
+            <label class="placeholder">Endereço</label>
+        </div>
+    </div>
+
+    <div class="input-group">
+        <div class="input-field">
+            <input type="text" name="telefone" id="telefone" required>
+            <label class="placeholder">Telefone</label>
+        </div>
+        <div class="input-field">
+            <input type="text" name="titulacao" required>
+            <label class="placeholder">Titulação</label>
+        </div>
+    </div>
+
+    <div class="input-group">
+        <div class="input-field">
+            <select name="cursos[]" id="cursos" multiple="true" size=100>
+                <option value="">~ Selecione o(s) curso(s)</option>
+            </select>
+        </div>
+        <div class="input-field">
+            <input type="submit" value="Registrar">
+        </div>
+    </div>
+
+
+
+</form>
+
+<script type="module" src="cadastro_professor.js"></script>
