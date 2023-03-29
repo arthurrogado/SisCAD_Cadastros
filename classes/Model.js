@@ -30,10 +30,14 @@ class HttpClient {
         })
     }
 
+    getAll(url = this.baseUrl) {
+        return fetch(url)
+        .then(response => response.json())
+    }
+
     placeAll(url) {
         const tableBody = document.querySelector('tbody');
-        fetch(url)
-        .then(response => response.json())
+        this.getAll(url)
         .then(data => {
             data.forEach(line => {
                 let newLine = `<tr>`
