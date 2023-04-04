@@ -18,9 +18,13 @@ function updateRoute(route) {
 function navigateTo(route) {
     const currentPath = location.pathname
     let pageToOpen = `${currentPath}/pages/${route}/${route}.html`
-    console.log('pageToOpen: ' + pageToOpen)
     contentField = document.querySelector('#contentData')
-    contentField.src = pageToOpen
+    try{
+        contentField.src = pageToOpen
+    } catch (error) {
+        navigateTo('home')
+    }
+    
     updateRoute(route)   
 }
 
@@ -37,19 +41,6 @@ function changeActive(targetId) {
     }
     target.classList.add('active')
 }
-
-
-if(location.pathname.startsWith('/siscad')) {
-    let route = location.hash.slice(1)
-    if(route === '') {
-        navigateTo('home')
-    } else {
-        navigateTo(route)
-        changeActive(route)
-    }
-}
-    
-
 
 for(let menu of menus) {
     menu.addEventListener('click', (e) => {
@@ -69,3 +60,15 @@ for(let menu of menus) {
         
     })
 }
+
+
+if(location.pathname.startsWith('/siscad')) {
+    let route = location.hash.slice(1)
+    if(route === '') {
+        navigateTo('home')
+    } else {
+        navigateTo(route)
+        changeActive(route)
+    }
+}
+    
