@@ -6,10 +6,6 @@ routes = {
     '/cadastrar_curso': 'cadastrar_curso',
 }
 
-dataTest = {
-    routeInicio: '',
-    routeBotao: ''
-}
 
 function updateRoute(route) {
     history.pushState({}, route, window.location.origin + '/siscad#' + route)
@@ -24,8 +20,7 @@ function navigateTo(route) {
     } catch (error) {
         navigateTo('home')
     }
-    
-    updateRoute(route)   
+     
 }
 
 function changeActive(targetId) {
@@ -63,7 +58,23 @@ for(let menu of menus) {
 
 
 if(location.pathname.startsWith('/siscad')) {
-    let route = location.hash.slice(1)
+
+    rootRoute = location.hash.slice(1)
+    updateRoute(rootRoute)
+
+    subRoutes = rootRoute.split('/')
+    let route = subRoutes[0]
+
+    let params = {}
+    // Getting the part of parameters from root of route
+    subRoutes[1]?.split('&').map(param => {
+        let [key, value] = param.split('=')
+        params[key] = value
+    })
+
+    if(Object.keys(params).length > 0) {}
+
+    // Redirect to /home if the route is unavailable
     if(route === '') {
         navigateTo('home')
     } else {
