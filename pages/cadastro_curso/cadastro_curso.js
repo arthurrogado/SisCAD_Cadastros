@@ -1,4 +1,11 @@
-const btn_register = document.querySelector('#btn_register')
+import HttpClient from "../../classes/Model.js";
+
+const cadastroDisciplina = new HttpClient('./cadastro_curso.php');
+cadastroDisciplina.registerListener();
+
+
+
+/* const btn_register = document.querySelector('#btn_register')
 const form = document.querySelector('#form-cadastro');
 
 form.addEventListener('submit', (event) => {
@@ -30,3 +37,4 @@ form.addEventListener('submit', (event) => {
 		console.log(error)
 	});
 });
+ */

@@ -44,8 +44,8 @@ for(let menu of menus) {
         if(target.tagName !== "LI") {return}
 
         changeActive(target.id)
-        
         navigateTo(target.id)
+        updateRoute(target.id)
 
         /* contentField.addEventListener('load', () => {
             console.log('ALTERADO')
@@ -55,7 +55,6 @@ for(let menu of menus) {
         
     })
 }
-
 
 if(location.pathname.startsWith('/siscad')) {
 
@@ -72,7 +71,6 @@ if(location.pathname.startsWith('/siscad')) {
         params[key] = value
     })
 
-    if(Object.keys(params).length > 0) {}
 
     // Redirect to /home if the route is unavailable
     if(route === '') {
@@ -82,4 +80,4 @@ if(location.pathname.startsWith('/siscad')) {
         changeActive(route)
     }
 }
-    
+

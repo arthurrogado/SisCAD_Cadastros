@@ -64,6 +64,7 @@ iframe {
     padding: 10px;
 }
 
+/* placeholder */
 .input-field label {
     position: absolute;
     left: 15px;
@@ -77,6 +78,7 @@ iframe {
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 6px;
+    height: 2.5rem;
 }
 .input-field input {
     height: 2.5rem;
@@ -96,9 +98,11 @@ iframe {
 .input-field input:valid ~ label,
 .input-field input:focus ~ label,
 .input-field textarea:valid ~ label,
-.input-field textarea:focus ~ label {
+.input-field textarea:focus ~ label,
+.input-field select:valid ~ label,
+.input-field select:focus ~ label {
     bottom: 50px;
-    font-size: 0.7em;
+    font-size: 0.9em;
     color: blue;
     transform: translateY(-25px);
     opacity: 1;

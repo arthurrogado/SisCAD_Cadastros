@@ -1,0 +1,87 @@
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../../css/style.css">
+
+<form class="form" method="POST" id='form-cadastro'>
+    <div class="input-group">
+
+        <div class="input-field">
+            <input type="text" name="nome" required>
+            <label class="placeholder">Nome da turma</label>
+        </div>
+
+        <div class="input-field">
+            <select name="curso" id="curso" required>
+                <option value=""></option>
+                <option value="0">Nada</option>
+            </select>
+            <label for="curso">Selecione o curso</label>
+        </div>
+
+        <div class="input-field">
+            <select name="periodo" id="periodo" required>
+                <option value=""></option>
+                <option value="1">Primeiro</option>
+                <option value="2">Segundo</option>
+                <option value="3">Terceiro</option>
+                <option value="4">Quarto</option>
+                <option value="5">Quinto</option>
+                <option value="6">Sexto</option>
+            </select>
+            <label for="periodo" class="select-placeholder">Selecione um período</label>
+        </div>
+
+    </div>
+
+    <div class="input-group">
+        <div class="input-field">
+            <input type="text" name="ano" required>
+            <label class="placeholder">Ano</label>
+        </div>
+
+        <div class="input-field">
+            <input type="number" name="semestre" required>
+            <label class="placeholder">Semestre</label>
+        </div>
+    </div>
+
+    <div class="input-group">
+        <div id="selectDays">
+            <input type="checkbox" name="dias[]" value="2" >
+            <label class="placeholder">Segunda-feira</label>
+
+            <input type="checkbox" name="dias[]" value="3" >
+            <label class="placeholder">Terça-feira</label>
+
+            <input type="checkbox" name="dias[]" value="4" >
+            <label class="placeholder">Quarta-feira</label>
+
+            <input type="checkbox" name="dias[]" value="5" >
+            <label class="placeholder">Quinta-feira</label>
+
+            <input type="checkbox" name="dias[]" value="6" >
+            <label class="placeholder">Sexta-feira</label>
+        </div>
+    </div>
+
+    <div class="input-group">
+        <div>
+            <input type="radio" name="horario" value="matutino">
+            <label class="placeholder">Matutino</label>
+
+            <input type="radio" name="horario" value="vespertino">
+            <label class="placeholder">Vespertino</label>
+
+            <input type="radio" name="horario" value="noturno">
+            <label class="placeholder">Noturno</label>
+        </div>
+    </div>
+
+    <div class="input-group">
+        <div class="input-field">
+            <input type="submit" value="Registrar">
+        </div>
+    </div>
+
+</form>
+
+<script type="module" src="./cadastro_turma.js"></script>

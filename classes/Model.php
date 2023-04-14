@@ -39,6 +39,38 @@
             echo json_encode($this->insert($table, $data));
         }
 
+        public function insertAndLinkToNxNTable($mainTable, $mainData, $otherTable, $idsOtherTable, $otherTableMainColumn, $otherTableOtherColumn){
+            $this->conn->beginTransaction();
+            $mainInsert = $this->insert($mainTable, $mainData);
+            
+            // Check if the main insert was successful
+            if($mainInsert['status'] == '201'){
+                $idMainInsert = $this->conn->lastInsertId();
+                
+                foreach ($idsOtherTable as $idOtherTable) {
+                    // Data to insert in the other table
+                    // Exemple: professor(main) and professores_cursos(other)
+                    $otherData = array(
+                        $otherTableMainColumn => $idMainInsert,
+                        $otherTableOtherColumn => $idOtherTable
+                    );
+                    $otherInsert = $this->insert($otherTable, $otherData);
+                    if($otherInsert['status'] != '201') {
+                        $this->conn->rollBack();
+                        return array('status' => 'Failed', 'message' => 'Houve alguma falha com o banco de dados!');
+                    } // if there is an error, do a rollback (don't insert anything in the database)
+                }
+
+                $this->conn->commit();
+                return array('status' => '201', 'message' => 'Cadastro relizado com sucesso!');
+            }
+            else {
+                $this->conn->rollBack();
+                return array('status' => 'Failed', 'message' => 'Houve alguma falha com o banco de dados!');
+            }
+
+        }
+
         public function echoError($message) {
             echo json_encode(array('status' => 'Failed', 'message' => $message));
         }
