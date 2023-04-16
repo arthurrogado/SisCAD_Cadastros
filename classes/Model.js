@@ -18,6 +18,12 @@ class HttpClient {
             }
             
             this.formData = new FormData(this.form)
+            this.formData.forEach((value, key) => {
+                console.log(key, value)
+            })
+
+            console.log(Array.from(this.formData))
+
             fetch(url, {
                 method: 'POST',
                 body: this.formData
@@ -31,6 +37,8 @@ class HttpClient {
                         const element = this.form.elements[i];
                         if (element.type === 'text' || element.type === 'number' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') {
                             element.value = '';
+                        } else if(element.type === 'checkbox' || element.type === 'radio') {
+                            element.checked = false
                         }
                     }
                 }
@@ -81,6 +89,21 @@ class HttpClient {
         }
         // If there is no missing required select, return false (NO MISSING REQUIRED SELECT)
         return false
+    }
+
+    fillSelect(url, selectName) {
+        const select = document.querySelector(`select[name=${selectName}]`)
+        if(!select) return
+
+        this.getAll(url)
+        .then(data => {
+            data.forEach((table)=>{
+                let option = document.createElement('option')
+                option.value = table.id
+                option.innerHTML = table.nome
+                select.appendChild(option)
+            })
+        })
     }
 
 }

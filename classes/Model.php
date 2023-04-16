@@ -22,6 +22,9 @@
             $sql = "INSERT INTO $table ($fields) VALUES ($binders);";
             $query = $this->conn->prepare($sql);
             foreach ($data as $key => $value) {
+                if(is_array($value)) {
+                    $value = implode(',', $value);
+                }
                 $query->bindValue(":$key", $value);
             }
             if($query->execute()){
