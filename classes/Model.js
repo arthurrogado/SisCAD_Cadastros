@@ -1,7 +1,6 @@
 class HttpClient {
     constructor(baseUrl) {
         this.baseUrl = baseUrl
-        console.log(this.requiredSelects)
     }
 
     requiredSelects = {}
@@ -52,6 +51,13 @@ class HttpClient {
         .then(response => response.json())
     }
 
+    async getNameById(table, id){
+        const response = await fetch(`../listagem_${table}/listagem_${table}.php`)
+        const data = await response.json()
+        const item = await data.find((e) => e.id === id).nome
+        return item
+    }
+
     placeAll(url) {
         const tableBody = document.querySelector('tbody');
         this.getAll(url)
@@ -67,9 +73,10 @@ class HttpClient {
         })
     }
 
+
+
     requireSelectByName(name){
         this.requiredSelects[name] = true
-        console.log(this.requiredSelects)
     }
 
     // Verify if all required selects are selected, if there is any required select, return false
@@ -91,6 +98,7 @@ class HttpClient {
         return false
     }
 
+    // Fill elements select with data from url (listagem_)
     fillSelect(url, selectName) {
         const select = document.querySelector(`select[name=${selectName}]`)
         if(!select) return
