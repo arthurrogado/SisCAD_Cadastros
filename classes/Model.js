@@ -99,8 +99,8 @@ class HttpClient {
     }
 
     // Fill elements select with data from url (listagem_)
-    fillSelect(url, selectName) {
-        const select = document.querySelector(`select[name=${selectName}]`)
+    fillSelectByID(url, id) {
+        const select = document.getElementById(id)
         if(!select) return
 
         this.getAll(url)
