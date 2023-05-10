@@ -99,38 +99,6 @@
 
         }
 
-        public function insertAndLinkToNxNTableBKP($mainTable, $mainData, $otherTable, $idsOtherTable, $otherTableMainColumn, $otherTableOtherColumn){
-            $this->conn->beginTransaction();
-            $mainInsert = $this->insert($mainTable, $mainData);
-            
-            // Check if the main insert was successful
-            if($mainInsert['status'] == '201'){
-                $idMainInsert = $this->conn->lastInsertId();
-                
-                foreach ($idsOtherTable as $idOtherTable) {
-                    // Data to insert in the other table
-                    // Exemple: professor(main) and professores_cursos(other)
-                    $otherData = array(
-                        $otherTableMainColumn => $idMainInsert,
-                        $otherTableOtherColumn => $idOtherTable
-                    );
-                    $otherInsert = $this->insert($otherTable, $otherData);
-                    if($otherInsert['status'] != '201') {
-                        $this->conn->rollBack();
-                        return array('status' => 'Failed', 'message' => 'Houve alguma falha com o banco de dados!');
-                    } // if there is an error, do a rollback (don't insert anything in the database)
-                }
-
-                $this->conn->commit();
-                return array('status' => '201', 'message' => 'Cadastro relizado com sucesso!');
-            }
-            else {
-                $this->conn->rollBack();
-                return array('status' => 'Failed', 'message' => 'Houve alguma falha com o banco de dados!');
-            }
-
-        }
-
         public function echoError($message) {
             echo json_encode(array('status' => 'Failed', 'message' => $message));
         }
@@ -145,6 +113,60 @@
 
         public function echoAll($table) {
             echo json_encode($this->getAll($table));
+        }
+
+        public function getDataById($table, $id) {
+            $sql = "SELECT * FROM $table WHERE id = :id;";
+            $query = $this->conn->prepare($sql);
+            $query->bindValue(':id', $id);
+            $query->execute();
+            $result = $query->fetch(PDO::FETCH_OBJ);
+            return $result;
+        }
+        public function echoDataById($table, $id) {
+            echo json_encode($this->getDataById($table, $id));
+        }
+
+        public function getTurmasFromProfessor($idProfessor) {
+            $sql = "SELECT * FROM turmas INNER JOIN professores_turmas ON turmas.id = professores_turmas.id_turma WHERE professores_turmas.id_professor = :idProfessor;";
+            $query = $this->conn->prepare($sql);
+            $query->bindValue(':idProfessor', $idProfessor);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
+            return $result;
+        }
+        public function echoTurmasFromProfessor($idProfessor) {
+            echo json_encode($this->getTurmasFromProfessor($idProfessor));
+        }
+
+        public function vincularProfessorTurma($idProfessor, $idTurma) {
+            $sql = "INSERT INTO professores_turmas (id_professor, id_turma) VALUES (:idProfessor, :idTurma);";
+            $query = $this->conn->prepare($sql);
+            $query->bindValue(':idProfessor', $idProfessor);
+            $query->bindValue(':idTurma', $idTurma);
+            if($query->execute()){
+                $status = '201';
+                $message = 'Cadastro relizado com sucesso!';
+            } else {
+                $status = 'Failed';
+                $message = 'Houve alguma falha com o banco de dados!';
+            }
+            echo json_encode( array('status' => $status, 'message' => $message) );
+        }
+
+        public function desvincularProfessorTurma($idProfessor, $idTurma) {
+            $sql = "DELETE FROM professores_turmas WHERE id_professor = :idProfessor AND id_turma = :idTurma;";
+            $query = $this->conn->prepare($sql);
+            $query->bindValue(':idProfessor', $idProfessor);
+            $query->bindValue(':idTurma', $idTurma);
+            if($query->execute()){
+                $status = '201';
+                $message = 'Desvínculo ocorrido com sucesso!';
+            } else {
+                $status = 'Failed';
+                $message = 'Houve alguma falha com o banco de dados!';
+            }
+            echo json_encode( array('status' => $status, 'message' => $message) );
         }
 
     }

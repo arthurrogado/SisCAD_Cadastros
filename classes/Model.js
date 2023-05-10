@@ -1,11 +1,22 @@
 class HttpClient {
-    constructor(baseUrl) {
+    constructor(baseUrl = '') {
         this.baseUrl = baseUrl
     }
 
     requiredSelects = {}
-    
 
+    params = {}
+
+    getParams() {
+        console.log('rota ' + location.href)
+        location.href.split('?')[1].split('&').map((param) => {
+            console.log(param)
+            let [key, value] = param.split('=')
+            this.params[key] = value
+        })
+        return this.params
+    }
+    
     registerListener(url = this.baseUrl) {
         this.form = document.querySelector('#form-cadastro')
         this.form.addEventListener('submit', (e)=>{
@@ -56,6 +67,48 @@ class HttpClient {
         const data = await response.json()
         const item = await data.find((e) => e.id === id).nome
         return item
+    }
+
+    getDataById(table, id, url = this.baseUrl){
+        const fd = new FormData()
+        fd.append('table', table)
+        fd.append('id', id)
+        return fetch(url, {
+            method: 'POST',
+            body: fd
+        })
+        .then(response => response.json())
+    }
+
+    placeDataById(table, id, url = this.baseUrl) {
+        const tableBody = document.querySelector('tbody');
+        
+        this.getDataById(table, id, url)
+        .then(data => {
+            console.log(data)
+
+            for (const field in data) {
+                let tr = document.querySelector(`tr[data=${field}]`)
+                tr.querySelector('td').innerHTML = data[field]
+            }
+        })
+    }
+
+
+    async APIgetDataById(table, id){
+        const body = {
+            'action': 'getDataById',
+            'table': table,
+            'data': {'id': id}
+        }
+        fetch('../../classes/api.php', {
+            method: 'POST',
+            body: body
+        })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
     }
 
     placeAll(url) {

@@ -6,18 +6,38 @@ routes = {
     '/cadastrar_curso': 'cadastrar_curso',
 }
 
+function alertTest() {
+    alert('Test from index.js')
+}
+
+function test() {
+    console.log( document.querySelector('li#home') )
+}
 
 function updateRoute(route) {
     history.pushState({}, route, window.location.origin + '/siscad#' + route)
 }
 
-function navigateTo(route) {
+function navigateTo(route, params = {}) {
     const currentPath = location.pathname
-    let pageToOpen = `${currentPath}/pages/${route}/${route}.html`
+    var pageToOpen
+
+    if(params != {}) {
+        params = JSON.stringify(params).replace(/[ {}" ]/g, '').replace(':', '=')
+        pageToOpen = `${currentPath}/pages/${route}/${route}.html?${params}`
+        updateRoute(`${route}?${params}`)
+    } else {
+        pageToOpen = `${currentPath}/pages/${route}/${route}.html`
+    }
+
+    console.log('params: ', params)
+    console.log(`ROTA: ${pageToOpen}`)
+
     contentField = document.querySelector('#contentData')
     try{
         contentField.src = pageToOpen
     } catch (error) {
+        console.log('Error: ', error)
         navigateTo('home')
     }
      
@@ -47,12 +67,6 @@ for(let menu of menus) {
         navigateTo(target.id)
         updateRoute(target.id)
 
-        /* contentField.addEventListener('load', () => {
-            console.log('ALTERADO')
-            contentField.style.height = contentField.contentWindow.document.body.scrollHeight + 'px';
-        }) */
-
-        
     })
 }
 
@@ -61,23 +75,30 @@ if(location.pathname.startsWith('/siscad')) {
     rootRoute = location.hash.slice(1)
     updateRoute(rootRoute)
 
-    subRoutes = rootRoute.split('/')
-    let route = subRoutes[0]
+    mainRoute = rootRoute.split('?')[0]
+    console.log('MAIN ROUTE ', mainRoute)
+
+    subRoutes = rootRoute.split('?')[1]
 
     let params = {}
     // Getting the part of parameters from root of route
-    subRoutes[1]?.split('&').map(param => {
+    subRoutes?.split('&').map(param => {
         let [key, value] = param.split('=')
         params[key] = value
     })
-
+        
+    const iframe = document.querySelector('iframe')
+    iframe.addEventListener('load', () => {
+        // Sending the parameters to the iframe
+        iframe.contentWindow.postMessage(params, '*')
+    })
+    
 
     // Redirect to /home if the route is unavailable
-    if(route === '') {
+    if(rootRoute === '') {
         navigateTo('home')
     } else {
-        navigateTo(route)
-        changeActive(route)
+        navigateTo(mainRoute, params)
+        changeActive(mainRoute)
     }
 }
-

@@ -112,17 +112,18 @@ iframe {
 
 
 /* TABELAS */
-.dataTable {
+
+.dataTable, .viewTable {
     width: 100%;
     text-align: center;
 }
 
-.dataTable thead {
+.dataTable thead, .viewTable th {
     background-color: blue;
     color: white;
 }
 
-.dataTable tr {
+.dataTable tr, .viewTable tr {
     height: 2rem;
 }
 
@@ -130,3 +131,113 @@ iframe {
     background-color: #ccc;
 }
 
+
+.viewTable {
+    border-collapse: collapse;
+}
+
+.viewTable th {
+    max-width: 100px;
+    text-align: start;
+    padding: 10px;
+}
+
+
+
+
+
+
+.pesquisa {
+    background-color: rgb(23, 59, 138);
+    border-radius: 10px;
+    width: 90%;
+    margin: 10px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    color: white;
+    transition: .3s;
+    transform: scaleY(0);
+}
+.pesquisa.open {
+    transform: scaleY(1);
+}
+.pesquisa input[type='text'] {
+    width: 100%;
+    height: 2.5rem;
+    border: 1px solid #2f00ff;
+    border-radius: 10px 10px 0px 0px;
+    padding: 0 10px;
+    font-size: 1rem;
+    outline: none;
+}
+.pesquisa ul {
+    width: 100%;
+    list-style: none;
+    padding: 0;
+}
+.pesquisa li {
+    box-sizing: border-box;
+    margin: 0px;
+    width: 100%;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    transition: .3s;
+}
+.pesquisa li:hover {
+    background-color: #00000028;
+}
+.pesquisa li:last-child {
+    border-bottom: none;
+}
+#fecharPesquisa {
+    width: 100%;
+    margin: auto;
+    color: #ff5f5f;
+    border: 1px solid #ff5f5f;
+    border-radius: 0px 0px 10px 10px;
+    line-height: 1.4rem;
+}
+
+
+
+
+
+
+
+/* BUTTONS */
+
+.btn {
+    width: 100%;
+    height: 2.5rem;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    transition: .3s;
+}
+.btn-danger {
+    background-color: #ff5f5f;
+}
+
+
+.outlineButton { 
+    width: 100%;
+    height: 2.5rem;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #047c91;
+    border: 1px solid #047c91;
+    border-radius: 10px;
+    transition: .3s;
+}
+.outlineButton:hover {
+    background-color: #047c91;
+    color: white;
+}

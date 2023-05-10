@@ -15,6 +15,8 @@
         'otherTableOtherColumn' => 'id_disciplina'
     );
 
+    
+
     array_push($otherLinks, $linkToDisciplinas);
 
     echo json_encode( $cadastroTurma->insertAndLinkToNxNTable('turmas', $_POST, $otherLinks) );
