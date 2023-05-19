@@ -7,8 +7,8 @@ class ClasseVisualizarProfessor extends HttpClient {
 
     deleteTurma(id_professor, id_turma) {
         let bodyFormData = new FormData()
-        bodyFormData.append('action', 'desvincularProfessorTurma')
-        bodyFormData.append('data', JSON.stringify({'id_professor': id_professor, 'id_turma': id_turma}) )
+        bodyFormData.set('action', 'desvincularProfessorTurma')
+        bodyFormData.set('data', JSON.stringify({'id_professor': id_professor, 'id_turma': id_turma}) )
 
         fetch('../../classes/api.php', {
             method: 'POST',
@@ -21,13 +21,17 @@ class ClasseVisualizarProfessor extends HttpClient {
     }
 
     placeTurmasFromProfessor() {
-        let bodyFormData = new FormData()
-        bodyFormData.append('action', 'echoTurmasFromProfessor')
-        bodyFormData.append('data', JSON.stringify({'id': this.params.id}) )
+        let body = {
+            'action': 'echoTurmasFromProfessor',
+            'id': this.params.id
+        }
+        let bodyFd = new FormData()
+        bodyFd.set('data', JSON.stringify(body))
+        
 
         fetch('../../classes/api.php', {
             method: 'POST',
-            body: bodyFormData
+            body: bodyFd
         })
         .then(response => response.json())
         .then(turmas => {
@@ -58,9 +62,12 @@ class ClasseVisualizarProfessor extends HttpClient {
 
 
     placeOtherTurmas() {
+        const body = {
+            'action': 'getDataByTable',
+            'table': 'turmas'
+        }
         let bodyFormData = new FormData()
-        bodyFormData.append('action', 'echoAll')
-        bodyFormData.append('table', 'turmas')
+        bodyFormData.append('data', JSON.stringify(body))
 
         fetch('../../classes/api.php', {
             method: 'POST',
@@ -139,8 +146,15 @@ document.querySelector('#fecharPesquisa').addEventListener('click', () => {
 
     
 const visualizarProfessor = new ClasseVisualizarProfessor('./visualizar_professor.php');
-visualizarProfessor.params = visualizarProfessor.getParams()
-visualizarProfessor.placeDataById('professores', visualizarProfessor.params.id)
-visualizarProfessor.placeTurmasFromProfessor()
-visualizarProfessor.placeOtherTurmas()
 
+const dataPromise = visualizarProfessor.APIgetDataById('professores', visualizarProfessor.params.id)
+//const dataPromise = visualizarProfessor.APIgetDataByTable('professores')
+
+visualizarProfessor.createAndFillTable(dataPromise, ['#', 'Nome', 'Endereço', 'Telefone', 'Titulação'], false, 'detailTable')
+
+visualizarProfessor.placeTurmasFromProfessor()
+const mainId = visualizarProfessor.params.id || 0
+visualizarProfessor.createLinkerTable('turmas', 'professores_turmas', 'id_professor', mainId, 'id_turma', ['id', 'nome', 'ano'], ['ID', 'Nome', 'Ano', 'X'] )
+/*
+visualizarProfessor.placeDataById('professores', visualizarProfessor.params.id)
+visualizarProfessor.placeOtherTurmas() */

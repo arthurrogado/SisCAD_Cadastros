@@ -1,7 +1,7 @@
 import HttpClient from "../../classes/Model.js";
 
 const cadastroDisciplina = new HttpClient('./cadastro_curso.php');
-cadastroDisciplina.registerListener(local='cursos');
+cadastroDisciplina.registerListener('cursos');
 
 
 

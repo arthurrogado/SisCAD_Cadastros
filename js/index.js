@@ -1,10 +1,7 @@
+import { navigateTo, updateRoute } from '../js/functions.js'
+
 const menuItems = document.querySelector('#menuItems')
 const menus = menuItems.children
-
-routes = {
-    '/': 'home',
-    '/cadastrar_curso': 'cadastrar_curso',
-}
 
 function alertTest() {
     alert('Test from index.js')
@@ -14,7 +11,7 @@ function test() {
     console.log( document.querySelector('li#home') )
 }
 
-function updateRoute(route) {
+/* function updateRoute(route) {
     history.pushState({}, route, window.location.origin + '/siscad#' + route)
 }
 
@@ -39,12 +36,19 @@ function navigateTo(route, params = {}) {
     } catch (error) {
         console.log('Error: ', error)
         navigateTo('home')
-    }
-     
+    }  
+} */
+
+
+
+
+
+function teste() {
+    console.log('AQUI DO INDEX.JS')
 }
 
 function changeActive(targetId) {
-    target = document.querySelector(`#${targetId}`)
+    let target = document.querySelector(`#${targetId}`)
     // Verify if the menu is not active yet. It it is, ignore
     if(target.classList.contains('active')){return}
 
@@ -60,6 +64,7 @@ function changeActive(targetId) {
 for(let menu of menus) {
     menu.addEventListener('click', (e) => {
         const target = e.target
+
         // Verify if the item is an <li>
         if(target.tagName !== "LI") {return}
 
@@ -72,13 +77,13 @@ for(let menu of menus) {
 
 if(location.pathname.startsWith('/siscad')) {
 
-    rootRoute = location.hash.slice(1)
+    let rootRoute = location.hash.slice(1)
     updateRoute(rootRoute)
 
-    mainRoute = rootRoute.split('?')[0]
+    let mainRoute = rootRoute.split('?')[0]
     console.log('MAIN ROUTE ', mainRoute)
 
-    subRoutes = rootRoute.split('?')[1]
+    let subRoutes = rootRoute.split('?')[1]
 
     let params = {}
     // Getting the part of parameters from root of route

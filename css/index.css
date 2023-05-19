@@ -53,4 +53,5 @@
     flex-direction: column;
     align-items: center;
     margin-left: 250px;
+    overflow-y: auto;
 }

@@ -127,8 +127,56 @@
             echo json_encode($this->getDataById($table, $id));
         }
 
+        /* 'otherTable': otherTable,
+                'relationTable': relationTable,
+                'relationTableMainColumn': relationTableMainColumn,
+                'mainId': mainId,
+                'relationTableOtherColumn': relationTableOtherColumn */
+        public function getDataFromRelation($otherTable, $relationTable, $relationTableMainColumn, $mainId, $relationTableOtherColumn) {
+            $sql = "SELECT * FROM $otherTable WHERE id IN (SELECT $relationTableOtherColumn FROM $relationTable WHERE $relationTableMainColumn = :mainId);";
+            $query = $this->conn->prepare($sql);
+            $query->bindValue(':mainId', $mainId);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
+            return $result;
+        }
+        public function echoDataFromRelation($otherTable, $relationTable, $relationTableMainColumn, $mainId, $relationTableOtherColumn) {
+            echo json_encode($this->getDataFromRelation($otherTable, $relationTable, $relationTableMainColumn, $mainId, $relationTableOtherColumn));
+        }
+
+        
+
+        public function deleteDataById($table, $id) {
+            $sql = "DELETE FROM $table WHERE id = :id;";
+            $query = $this->conn->prepare($sql);
+            $query->bindValue(':id', $id);
+            if($query->execute()){
+                $status = '201';
+                $message = 'Cadastro deletado com sucesso!';
+            } else {
+                $status = 'Failed';
+                $message = 'Houve alguma falha com o banco de dados!';
+            }
+
+            return array('status' => $status, 'message' => $message);
+        }
+        public function echoDeleteDataById($table, $id) {
+            echo json_encode($this->deleteDataById($table, $id));
+        }
+
+        public function getDataByTable($table) {
+            $sql = "SELECT * FROM $table;";
+            $query = $this->conn->prepare($sql);
+            $query->execute();
+            $result = $query->fetchAll(PDO::FETCH_OBJ);
+            return $result;
+        }
+        public function echoDataByTable($table) {
+            echo json_encode($this->getDataByTable($table));
+        }
+
         public function getTurmasFromProfessor($idProfessor) {
-            $sql = "SELECT * FROM turmas INNER JOIN professores_turmas ON turmas.id = professores_turmas.id_turma WHERE professores_turmas.id_professor = :idProfessor;";
+            $sql = "SELECT turmas.* FROM turmas INNER JOIN professores_turmas ON turmas.id = professores_turmas.id_turma WHERE professores_turmas.id_professor = :idProfessor;";
             $query = $this->conn->prepare($sql);
             $query->bindValue(':idProfessor', $idProfessor);
             $query->execute();

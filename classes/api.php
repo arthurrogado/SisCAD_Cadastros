@@ -3,25 +3,43 @@
     require '../classes/Model.php';
 
     $api = new Model();
+    
+    $data = filter_input(INPUT_POST, 'data', FILTER_DEFAULT);
+    if($data) {
 
-    if($_POST['action']) {
-
-        $action = filter_input(INPUT_POST, 'action', FILTER_DEFAULT);        
-        $table = filter_input(INPUT_POST, 'table', FILTER_DEFAULT);
-        $data = filter_input(INPUT_POST, 'data', FILTER_DEFAULT);
+        /* $action = filter_input(INPUT_POST, 'action', FILTER_DEFAULT);        
+        $table = filter_input(INPUT_POST, 'table', FILTER_DEFAULT); */
         $data = json_decode($data);
 
-        switch ($action) {
+        switch ($data->action) {
             case 'insert':
                 $api->insertEcho($table, $data);
                 break;
 
             case 'echoAll':
-                $api->echoAll($table);
+                $api->echoAll($data->table);
                 break;
 
-            case 'echoDataById':
+            case 'getDataById':
                 $api->echoDataById($data->table, $data->id);
+                break;
+
+            case 'getDataByTable':
+                $api->echoDataByTable($data->table);
+                break;
+            
+            case 'getDataFromRelation':
+                $otherTable = $data->otherTable;
+                $relationTable = $data->relationTable;
+                $relationTableMainColumn = $data->relationTableMainColumn;
+                $mainId = $data->mainId;
+                $relationTableOtherColumn = $data->relationTableOtherColumn;
+
+                $api->echoDataFromRelation($otherTable, $relationTable, $relationTableMainColumn, $mainId, $relationTableOtherColumn);
+                break;
+            
+            case 'deleteById':
+                $api->echoDeleteDataById($data->table, $data->id);
                 break;
 
             case 'echoTurmasFromProfessor':
@@ -39,6 +57,7 @@
                         
             default:
                 # code...
+                echo json_encode(array('status' => 'Failed', 'message' => "Acao '$data->action' nao encontrada!"));
                 break;
         }
         

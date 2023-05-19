@@ -113,17 +113,17 @@ iframe {
 
 /* TABELAS */
 
-.dataTable, .viewTable {
+.dataTable, .detailTable {
     width: 100%;
     text-align: center;
 }
 
-.dataTable thead, .viewTable th {
+.dataTable thead, .detailTable thead {
     background-color: blue;
     color: white;
 }
 
-.dataTable tr, .viewTable tr {
+.dataTable tr {
     height: 2rem;
 }
 
@@ -132,15 +132,19 @@ iframe {
 }
 
 
-.viewTable {
+.detailTable  {
+    display: flex;
     border-collapse: collapse;
 }
-
-.viewTable th {
-    max-width: 100px;
-    text-align: start;
+.detailTable thead , .detailTable tbody  {
+    display: flex;
+}
+.detailTable thead th, .detailTable tbody td {
+    display: flex;
     padding: 10px;
 }
+
+
 
 
 

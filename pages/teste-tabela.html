@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        table.horizontal {
+            display: flex;
+            border: 1px solid red;
+        }
+        .horizontal thead , .horizontal tbody  {
+            display: flex;
+            margin: 10px;
+            border: 1px solid green;
+        }
+        .horizontal thead th, .horizontal tbody td {
+            display: flex;
+            padding: 10px;
+            margin: 5px;
+            background-color: rgb(217, 217, 255);
+        }
+    </style>
+
+</head>
+<body>
+
+    <table class="horizontal">
+        <thead>
+            <th>ID</th>
+            <th>Nome</th>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>João</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Maria</td>
+            </tr>
+
+        </tbody>
+    </table>
+    
+</body>
+</html>
