@@ -128,6 +128,8 @@ class HttpClient {
         })
         .then(response => response.json())
     }
+
+    
     
 
     placeDataById(table, id, url = this.baseUrl) {
@@ -161,7 +163,7 @@ class HttpClient {
 
     }
 
-    createAndFillTable(dataPromise, headers = null, linkToDetails = false , tableClass = 'dataTable', deleteButton = false) {
+    /* async createAndFillTable(dataPromise, headers = null, linkToDetails = false , tableClass = 'dataTable', deleteButton = false) {
         let contentTable = document.createElement('table')
         let tableHead = document.createElement('thead')
         let tableBody = document.createElement('tbody')
@@ -179,70 +181,184 @@ class HttpClient {
             })
         }
 
-        console.log('dataPromise ', dataPromise)
-        // dataPromise: Data in promise provided, generally from API
-        dataPromise
-        .then(data => {
 
-            // if not an array, transform it into an array
-            if(!Array.isArray(data)) {
-                data = [data]
-            }
+        let dataToUse
+
+        let promiseDataToUse = new Promise((resolve, reject) => {
             
-            data.forEach(row => {
+            // Check if dataPromise is a promise, if it is resolve then make foreach, if not make foreach
+            if(dataPromise instanceof Promise) {
+                dataPromise
+                .then(data => {
+                    dataToUse = data
+                    resolve()
+                })
+            } else {
+                dataToUse = dataPromise
+                resolve()
+            }
+        })
+        await promiseDataToUse
+
+
+        // dataPromise: Data in promise provided, generally from API
+
+
+        // if not an array, transform it into an array
+        if(!Array.isArray(dataToUse)) {
+            dataToUse = [dataToUse]
+        }
+
+        console.log('dataToUse ', dataToUse)
+        
+        dataToUse.forEach(row => {
+            console.log('row ', row)
+            let tr = document.createElement('tr')
+            tr.setAttribute('rowId', row.id)
+
+            Object.values(row).forEach( value => {
+                let newTd = document.createElement('td')
+                newTd.innerHTML = value
+                tr.appendChild(newTd)
+            })
+            
+            // Adds a delete button to the row
+            if(deleteButton) {
+                let deleteButton = document.createElement('button')
+                deleteButton.innerHTML = 'Deletar'
+                deleteButton.classList.add('btn')
+                deleteButton.classList.add('btn-danger')
+                deleteButton.addEventListener('click', e => {
+                    let body = {
+                        'action': 'deleteDataById',
+                        'table': table,
+                        'id': tr.getAttribute('rowId')
+                    }
+                    let bodyFd = new FormData()
+                    bodyFd.append('data', JSON.stringify(body))
+                    
+                    fetch('../../classes/api.php', {
+                        method: 'POST',
+                        body: bodyFd
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.status === '200') {
+                            alert(data.message)
+                            tr.remove()
+                        }
+                    })
+                })
+                tr.appendChild(deleteButton)
+            }
+
+            tableBody.appendChild(tr)
+            document.querySelector('body').insertAdjacentElement('afterbegin', contentTable)
+
+            if(linkToDetails) {
+                tr.addEventListener('click', e => {
+                    this.navigateTo(`visualizar_${getSingularName(table)}`, {id: tr.getAttribute('rowId')})
+                })
+            }
+
+        })
+
+    } */
+
+
+    
+    createAndFillTable(dataPromise, headers = null, linkToDetails = false , tableClass = 'dataTable', columnsToShow = null, deleteCallbackFunction, selectorWhereInsert = 'body') {
+        let contentTable = document.createElement('table')
+        let tableHead = document.createElement('thead')
+        let tableBody = document.createElement('tbody')
+        contentTable.classList.add(tableClass)
+        contentTable.appendChild(tableHead)
+        contentTable.appendChild(tableBody)
+        
+        // If there are headers, create them in the table
+        if(headers) {
+            let trHead = document.createElement('tr')
+            tableHead.appendChild(trHead)
+            headers.forEach(header => {
+                let th = document.createElement('th')
+                th.innerHTML = header
+                trHead.appendChild(th)
+            })
+        }
+        
+        // Insert the rows in the table
+        function makeLoop(dataToTable) {
+            console.log('makeLoop - dataToTable ', dataToTable)
+            // if not an array, transform it into an array
+            if(!Array.isArray(dataToTable)) {
+                dataToTable = [dataToTable]
+            }
+                
+            dataToTable.forEach(row => {
+                console.log('row ', row)
                 let tr = document.createElement('tr')
                 tr.setAttribute('rowId', row.id)
-
-                Object.values(row).forEach( value => {
-                    let newTd = document.createElement('td')
-                    newTd.innerHTML = value
-                    tr.appendChild(newTd)
+    
+                // if columnsToShow is null, show all columns, if not, show only the columns in the array
+                Object.entries(row).forEach( ([key,value]) => {
+                    if(!columnsToShow || columnsToShow.includes(key)) {
+                        let newTd = document.createElement('td')
+                        newTd.innerHTML = value
+                        tr.appendChild(newTd)
+                    }
                 })
                 
                 // Adds a delete button to the row
-                if(deleteButton) {
+                if(deleteCallbackFunction) {
                     let deleteButton = document.createElement('button')
                     deleteButton.innerHTML = 'Deletar'
                     deleteButton.classList.add('btn')
                     deleteButton.classList.add('btn-danger')
-                    deleteButton.addEventListener('click', e => {
-                        let body = {
-                            'action': 'deleteDataById',
-                            'table': table,
-                            'id': tr.getAttribute('rowId')
-                        }
-                        let bodyFd = new FormData()
-                        bodyFd.append('data', JSON.stringify(body))
-                        
-                        fetch('../../classes/api.php', {
-                            method: 'POST',
-                            body: bodyFd
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if(data.status === '200') {
-                                alert(data.message)
-                                tr.remove()
-                            }
-                        })
-                    })
+                    deleteButton.addEventListener('click', () => deleteCallbackFunction(row))
                     tr.appendChild(deleteButton)
                 }
-
+    
                 tableBody.appendChild(tr)
-                document.querySelector('body').insertAdjacentElement('afterbegin', contentTable)
-
+                document.querySelector(selectorWhereInsert).innerHTML = ''
+                document.querySelector(selectorWhereInsert).insertAdjacentElement('beforeend', contentTable)
+    
                 if(linkToDetails) {
                     tr.addEventListener('click', e => {
                         this.navigateTo(`visualizar_${getSingularName(table)}`, {id: tr.getAttribute('rowId')})
                     })
                 }
-
             })
-        })
+        }
+
+        // Check if dataPromise is a promise, if it is resolve then make foreach, if not make foreach
+        let dataToUse
+        if(dataPromise instanceof Promise) {
+            console.log('É PROMISE')
+            dataPromise
+            .then(data => {
+                dataToUse = data
+                console.log('dataToUse ', dataToUse)
+                makeLoop(dataToUse)
+            })
+        } else {
+            console.log('NÃO É PROMISE')
+            dataToUse = dataPromise
+            makeLoop(dataToUse)
+        }
+
+        return contentTable
+
+        // 1. dataPromise: Data in promise provided, generally from API
+        // 2. headers: Headers of the table
+        // 3. linkToDetails: If the table has a link to details page
+        // 4. tableClass: Class of the table: detailTable, dataTable, etc
+        // 5. columnsToShow: If you want to show only some columns, pass an array with the columns names
+        // 6. deleteButton: If you want to show a delete button in the table
+        // 7. selectorWhereInsert: Where to insert the table, default is body
     }
 
-    createLinkerTable(otherTable, relationTable, relationTableMainColumn, mainId, relationTableOtherColumn, otherTableColumnsToShow = null, tableHeaders = null) {
+    createLinkerTable(otherTable, relationTable, relationTableMainColumn, mainId, relationTableOtherColumn, otherTableColumnsToShow = null, tableHeaders = null, selectorWhereInsert = 'body') {
+        
         // Creates table that makes the link between a register and its relations
         // Example: page of professor's details with a table of his classes
 
@@ -251,7 +367,14 @@ class HttpClient {
         // 3. relationTableMainColumn: what is the column in the relation table that has the id of the main data (registry)
         // 4. mainId: what is the id of the main data (registry)
         // 5. relationTableOtherColumn: what is the others ids from other table that must be shown in the linker table
+        
+        // clean the selectorWhereInsert
+        document.querySelector(selectorWhereInsert).innerHTML = ''
 
+        const openLinkerTableButton = document.createElement('button')
+        var alreadyLinkedItemsTable
+
+        ///////// Place already linked items table
         let body = {
             'action': 'getDataFromRelation',
             'otherTable': otherTable,
@@ -268,9 +391,9 @@ class HttpClient {
             body: bodyFd
         })
         .then(response => {
-            let relationData
+            let relationData = response.json()
             // If there are columns to show from the other table, delete the others
-            if(otherTableColumnsToShow) {
+            if(false /* otherTableColumnsToShow */) {
                 /* relationData = response.json().then(response => {
                     response.forEach(row => {
                         Object.keys(row).forEach(key => {
@@ -293,10 +416,196 @@ class HttpClient {
                 })
 
             }
-            else {relationData = response.json()}
-            console.log(relationData)
-            this.createAndFillTable(relationData, tableHeaders, false, 'dataTable', true)
+
+
+            alreadyLinkedItemsTable = this.createAndFillTable(relationData, tableHeaders, false, 'dataTable', otherTableColumnsToShow, true, selectorWhereInsert)
+            
+            openLinkerTableButton.innerHTML = 'Vincular'
+            openLinkerTableButton.classList.add('outlineButton')
+            // Click setted at linkerTable creation above
+
+            alreadyLinkedItemsTable.appendChild(openLinkerTableButton)
+
+            
+
+
+
+            ///////// Place other items table
+            // Example:
+            // SELECT * FROM turmas WHERE id NOT IN (SELECT id_turma FROM professores_turmas WHERE id_professor = 2);
+            // - table: turmas
+            // - id_turma: relationTableOtherColumn
+            // - id_professor: relationTableMainColumn
+            // - 2: mainId
+    
+            let bodyLink = {
+                'action': 'getDataNotLinked',
+                'otherTable': otherTable,
+                'relationTable': relationTable,
+                'relationTableMainColumn': relationTableMainColumn,
+                'relationTableOtherColumn': relationTableOtherColumn,
+                'mainId': mainId,
+            }
+            let bodyLinkFd = new FormData()
+            bodyLinkFd.append('data', JSON.stringify(bodyLink))
+    
+            fetch('../../classes/api.php',{
+                method: 'POST',
+                body: bodyLinkFd
+            })
+            .then(response => response.json())
+            .then(unlinkedItems => {
+                console.log('unlinkedItems ' )
+                console.log(unlinkedItems)
+    
+                const linkerTable = document.createElement('div')
+                linkerTable.classList.add('linkerTable')
+    
+                openLinkerTableButton.addEventListener('click', _ => {
+                    linkerTable.classList.toggle('open')
+                })
+    
+                const linkerSearch = document.createElement('input')
+                linkerSearch.setAttribute('type', 'text')
+                linkerSearch.setAttribute('placeholder', 'Pesquisar')
+                linkerTable.appendChild(linkerSearch)
+    
+                const linkerUl = document.createElement('ul')
+                linkerTable.appendChild(linkerUl)
+                
+                const closeButton = document.createElement('button')
+                closeButton.innerHTML = 'Fechar'
+                closeButton.id = 'closeLinkerTable'
+                closeButton.addEventListener('click', _ => {linkerTable.classList.remove('open')})
+                linkerTable.appendChild(closeButton)
+                
+                // Items that is possible to link
+                unlinkedItems.forEach(item => {
+                    const linkerLi = document.createElement('li')
+                    linkerLi.innerHTML = item.nome
+                    linkerLi.setAttribute('rowId', item.id)
+                    linkerLi.addEventListener('click', e => {
+                        let body = {
+                            'action': 'insert',
+                            'table': relationTable,
+                            'data': JSON.stringify({
+                                [relationTableMainColumn]: mainId,
+                                [relationTableOtherColumn]: item.id
+                            })
+                        }
+                        let linkFd = new FormData()
+                        linkFd.append('data', JSON.stringify(body))
+                        fetch('../../classes/api.php', {
+                            method: 'POST',
+                            body: linkFd
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data)
+                            if(data.status === '201') {
+                                alert(data.message)
+                                console.log(alreadyLinkedItemsTable)    
+                                //this.createAndFillTable(relationData, tableHeaders, false, 'dataTable', otherTableColumnsToShow, true, selectorWhereInsert)
+                                this.createLinkerTable(otherTable, relationTable, relationTableMainColumn, mainId, relationTableOtherColumn, otherTableColumnsToShow, tableHeaders ,selectorWhereInsert)
+                            }
+                        })
+                    })
+    
+                    linkerUl.appendChild(linkerLi)
+                })
+    
+                document.querySelector(selectorWhereInsert).appendChild(linkerTable)
+    
+            })
+            
         })
+        
+
+    }
+
+    buildListSearch(dataPromise, columnsToShow = null , placeholderButton = 'Vincular', callbackFunction = null, selectorWhereInsert = 'body') {
+        // Check if dataPromise is a promise, if it is resolve then make foreach, if not make foreach
+        let dataToUse
+        if(dataPromise instanceof Promise) {
+            dataPromise
+            .then(data => {
+                dataToUse = data
+                build(dataToUse)
+            })
+        } else {
+            dataToUse = dataPromise
+            build(dataToUse)
+        }
+
+        const totalDivSearch = document.createElement('div')
+        document.querySelector(selectorWhereInsert).innerHTML = ''
+        document.querySelector(selectorWhereInsert).appendChild(totalDivSearch)
+
+        totalDivSearch.style.border = '1px solid red'
+
+        const listSearch = document.createElement('div')
+        listSearch.classList.add('listTable')
+        
+        const openListButton = document.createElement('button')
+        openListButton.innerHTML = placeholderButton
+        openListButton.classList.add('outlineButton')
+        openListButton.addEventListener('click', _ => {listSearch.classList.toggle('open')})
+
+        const searchInput = document.createElement('input')
+        searchInput.setAttribute('type', 'text')
+        searchInput.setAttribute('placeholder', 'Pesquisar')
+
+        
+        const listItems = document.createElement('ul')
+        
+        // Search function
+        searchInput.addEventListener('keyup', (e) => {
+            const lis = listItems.querySelectorAll('li')
+            const value = e.target.value.toLowerCase()
+            for(const li of lis) {
+                const nome = li.innerHTML.toLowerCase()
+                nome.includes(value) ? li.style.display = 'block' : li.style.display = 'none'
+            }
+        })
+        
+        const closeListButton = document.createElement('button')
+        closeListButton.innerHTML = 'Fechar'
+        closeListButton.addEventListener('click', _ => {listSearch.classList.remove('open')})
+        
+        listSearch.appendChild(searchInput)
+        listSearch.appendChild(listItems)
+        listSearch.appendChild(closeListButton)
+
+        totalDivSearch.appendChild(openListButton)
+        totalDivSearch.appendChild(listSearch)
+
+
+        // Makes the List
+        function build(dataToUse) {
+            dataToUse.forEach( item => {
+                console.log(item)
+
+                const listItem = document.createElement('li')
+                listItem.innerHTML = item.nome
+                listItem.setAttribute('rowId', item.id)
+
+                // if columnsToShow is null, show all columns, if not, show only the columns in the array
+                Object.entries(item).forEach( ([key,value]) => {
+                    if(!columnsToShow || columnsToShow.includes(key)) {
+                        listItem.innerText.length > 0 ? listItem.innerHTML += " - " + value : listItem.innerHTML = value
+                    }
+                })
+
+                listItems.appendChild(listItem)
+
+                console.log('item')
+                console.log(item)
+
+                callbackFunction ? listItem.addEventListener('click', () => callbackFunction(item)) : null
+
+            })
+        }
+        return totalDivSearch
 
     }
 
@@ -315,8 +624,23 @@ class HttpClient {
 
 
 
-    // API --------------------------------------------------------------------
+    // APIs --------------------------------------------------------------------
     
+    async APIexecuteQuery(query) {
+        const body = {
+            'action': 'getDataByQuery',
+            'query': query
+        }
+        const bodyFd = new FormData()
+        bodyFd.append('data', JSON.stringify(body))
+
+        return fetch('../../classes/api.php', {
+            method: 'POST',
+            body: bodyFd
+        })
+        .then(response => response.json())
+    }
+
     async APIgetDataByTable(table) {
         const body = {
             'action': 'getDataByTable',
@@ -354,6 +678,76 @@ class HttpClient {
             console.log(data)
             return data
         }) */
+    }
+
+    APIgetDataFromRelation(otherTable, relationTable, relationTableMainColumn, mainId, relationTableOtherColumn){
+        let body = {
+            'action': 'getDataFromRelation',
+            'otherTable': otherTable,
+            'relationTable': relationTable,
+            'relationTableMainColumn': relationTableMainColumn,
+            'mainId': mainId,
+            'relationTableOtherColumn': relationTableOtherColumn
+        }
+        let bodyFd = new FormData()
+        bodyFd.append('data', JSON.stringify(body))
+        
+        return fetch('../../classes/api.php', {
+            method: 'POST',
+            body: bodyFd
+        })
+        .then(response => response.json())
+    }
+
+    APIgetDataNotLinked(otherTable, relationTable, relationTableMainColumn, mainId, relationTableOtherColumn){
+        let body = {
+            'action': 'getDataNotLinked',
+            'otherTable': otherTable,
+            'relationTable': relationTable,
+            'relationTableMainColumn': relationTableMainColumn,
+            'mainId': mainId,
+            'relationTableOtherColumn': relationTableOtherColumn
+        }
+        let bodyFd = new FormData()
+        bodyFd.append('data', JSON.stringify(body))
+        
+        return fetch('../../classes/api.php', {
+            method: 'POST',
+            body: bodyFd
+        })
+        .then(response => response.json())
+    }
+
+    APIinsertData(table, data){
+        let body = {
+            'action': 'insert',
+            'table': table,
+            'data': JSON.stringify(data)
+        }
+        let bodyFd = new FormData()
+        bodyFd.append('data', JSON.stringify(body))
+        
+        return fetch('../../classes/api.php', {
+            method: 'POST',
+            body: bodyFd
+        })
+        .then(response => response.json())
+    }
+
+    APIdeleteDataById(table, id){
+        let body = {
+            'action': 'deleteDataById',
+            'table': table,
+            'id': id
+        }
+        let bodyFd = new FormData()
+        bodyFd.append('data', JSON.stringify(body))
+        
+        return fetch('../../classes/api.php', {
+            method: 'POST',
+            body: bodyFd
+        })
+        .then(response => response.json())
     }
 
     // -------------------------------------------------------------------------

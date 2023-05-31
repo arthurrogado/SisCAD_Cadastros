@@ -13,7 +13,7 @@
 
         switch ($data->action) {
             case 'insert':
-                $api->insertEcho($table, $data);
+                $api->insertEcho($data->table, $data->data);
                 break;
 
             case 'echoAll':
@@ -27,6 +27,10 @@
             case 'getDataByTable':
                 $api->echoDataByTable($data->table);
                 break;
+
+            case 'getDataByQuery':
+                $api->echoExecuteQuery($data->query);
+                break;
             
             case 'getDataFromRelation':
                 $otherTable = $data->otherTable;
@@ -38,7 +42,17 @@
                 $api->echoDataFromRelation($otherTable, $relationTable, $relationTableMainColumn, $mainId, $relationTableOtherColumn);
                 break;
             
-            case 'deleteById':
+            case 'getDataNotLinked':
+                $otherTable = $data->otherTable;
+                $relationTable = $data->relationTable;
+                $relationTableMainColumn = $data->relationTableMainColumn;
+                $relationTableOtherColumn = $data->relationTableOtherColumn;
+                $mainId = $data->mainId;
+
+                $api->echoDataNotLinked($otherTable, $relationTable, $relationTableMainColumn, $relationTableOtherColumn, $mainId);
+                break;
+            
+            case 'deleteDataById':
                 $api->echoDeleteDataById($data->table, $data->id);
                 break;
 
