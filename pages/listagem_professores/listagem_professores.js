@@ -74,7 +74,7 @@ class listagemProfessores extends HttpClient {
 const listagem = new listagemProfessores('./listagem_professores.php')
 //listagem.placeAll()
 //listagem.placeAllLinks('./listagem_professores.php')
-listagem.createAndFillTable(listagem.APIgetDataByTable('professores'), ['#', 'Nome', 'Endereço', 'Telefone', 'Titulação' ], true)
+listagem.createAndFillTable(listagem.APIgetDataByTable('professores'), ['#', 'Nome', 'Endereço', 'Telefone', 'Titulação' ], 'professores')
 
 listagem.APIgetDataById('professores', 2)
 .then(data => {

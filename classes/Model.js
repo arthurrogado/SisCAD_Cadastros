@@ -287,7 +287,7 @@ class HttpClient {
         }
         
         // Insert the rows in the table
-        function makeLoop(dataToTable) {
+        const makeLoop = (dataToTable) => {
             console.log('makeLoop - dataToTable ', dataToTable)
             // if not an array, transform it into an array
             if(!Array.isArray(dataToTable)) {
@@ -323,8 +323,11 @@ class HttpClient {
                 document.querySelector(selectorWhereInsert).insertAdjacentElement('beforeend', contentTable)
     
                 if(linkToDetails) {
+                    const openDetailsPage = (id) => {
+                        this.navigateTo(`visualizar_${getSingularName(linkToDetails)}`, {id: id})
+                    }
                     tr.addEventListener('click', e => {
-                        this.navigateTo(`visualizar_${getSingularName(table)}`, {id: tr.getAttribute('rowId')})
+                        openDetailsPage(tr.getAttribute('rowId'))
                     })
                 }
             })
