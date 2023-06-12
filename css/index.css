@@ -2,6 +2,10 @@
     display: flex;
 }
 
+#menuItems > div {
+    display: none;
+}
+
 .sidebar {
     min-width: 250px;
     max-width: 250px;
@@ -9,6 +13,7 @@
     position: fixed;
     overflow-y: auto;
 }
+
 
 .sidebar ul li {
     margin: 10px;

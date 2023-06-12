@@ -1,0 +1,32 @@
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../../css/style.css">
+
+<div class="center">
+    <form class="form">
+        <div class="input-field">
+            <input id="user" name="user" type="text" required>
+            <label for="usiaroi">Usuário</label>
+        </div>
+        <div class="input-field">
+            <input id="password" name="password" type="password" required>
+            <label for="password">Password</label>
+        </div>
+
+        <div class="input-field">
+            <select name="type" id="type" required>
+                <option value="">~ Escolha um tipo</option>
+                <option value="alunos">Aluno</option>
+                <option value="professores">Professor</option>
+                <option value="secretaria">Secretaria</option>
+                <option value="admin">Administrador</option>
+            </select>
+        </div>
+
+        <input type="submit" value="LOGIN">
+    </form>
+</div>
+
+<button type="button" class="btn btn-primary" id="verify">Verificar login</button>
+<button class="btn btn-danger" id="logout">Logout</button>
+
+<script type="module" src="./login.js"></script>

@@ -4,8 +4,18 @@ function teste() {
     alert('funfou a importação')
 }
 
-function updateRoute(route) {
-    history.pushState({}, route, window.location.origin + '/siscad#' + route)
+function makeUrlParams(params) {
+    let urlParams = params ? '?' : ''
+    for(let param in params) {
+        urlParams += `${param}=${params[param]}&`
+    }
+    return urlParams
+}
+
+function updateRoute(route, params = null) {
+    params = makeUrlParams(params)
+    console.log('**** PARAMS: ', params)
+    history.pushState({}, route, window.location.origin + '/siscad#' + route + params)
 }
 
 function navigateTo(route, params = {}) {
@@ -14,8 +24,9 @@ function navigateTo(route, params = {}) {
     var pageToOpen
 
     if(params != {}) {
-        params = JSON.stringify(params).replace(/[ {}" ]/g, '').replace(':', '=')
-        pageToOpen = `${window.location.origin}/${currentPath}/pages/${route}/${route}.html?${params}`
+        //params = JSON.stringify(params).replace(/[ {}" ]/g, '').replace(':', '=')
+        params = makeUrlParams(params)
+        pageToOpen = `${window.location.origin}/${currentPath}/pages/${route}/${route}.html${params}`
         //updateRoute(`${route}?${params}`)
     } else {
         pageToOpen = `${window.location.origin}/${currentPath}/pages/${route}/${route}.html`
@@ -36,5 +47,6 @@ function navigateTo(route, params = {}) {
 
     }
 }
+
 
 export { updateRoute, navigateTo, teste}

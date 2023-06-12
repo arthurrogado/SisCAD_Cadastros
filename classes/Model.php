@@ -1,5 +1,7 @@
 <?php
 
+    session_start();
+    
     class Model
     {
         protected $conn;
@@ -8,6 +10,148 @@
         public function __construct() {
             require(dirname(__DIR__).'/db/db.php');
             $this->conn = $conn;
+        }
+
+        //Verifica se o usuário está logado
+        public function verifyLogin() {
+            if(!isset($_SESSION['user'])) {
+                $status = 'Failed';
+                $ok = false;
+                $message = 'Você não está logado!';
+            } else {
+                $status = '200';
+                $ok = true;
+                $message = 'Você está logado!';
+            }
+            return array('status' => $status, 'ok' => $ok, 'message' => $message);
+        }
+        public function echoVerifyLogin() {
+            echo json_encode($this->verifyLogin());
+        }
+
+        // Do login
+        public function login($user, $password, $type = 'admin') {
+            // $type can be: aluno, professor, rh, secretaria, admin
+            if($user == 'admin' && $password == 'admin') {
+                $status = '200';
+                $ok = true;
+                $message = 'Login realizado com sucesso!';
+                $_SESSION['user'] = $user;
+                $_SESSION['type'] = $type;
+            } else if ($user == 'professor' && $password == 'professor') {
+                $status = '200';
+                $ok = true;
+                $message = 'Login realizado com sucesso!';
+                $_SESSION['user'] = $user;
+                $_SESSION['type'] = $type;
+            } else if ($user == 'aluno' && $password == 'aluno') {
+                $status = '200';
+                $ok = true;
+                $message = 'Login realizado com sucesso!';
+                $_SESSION['user'] = $user;
+                $_SESSION['type'] = $type;
+            } else if($user == 'secretaria' && $password == 'secretaria') {
+                $status = '200';
+                $ok = true;
+                $message = 'Login realizado com sucesso!';
+                $_SESSION['user'] = $user;
+                $_SESSION['type'] = $type;
+            } else if($user == 'rh' && $password == 'rh') {
+                $status = '200';
+                $ok = true;
+                $message = 'Login realizado com sucesso!';
+                $_SESSION['user'] = $user;
+                $_SESSION['type'] = $type;
+            } else {
+                $status = 'Failed';
+                $ok = false;
+                $message = 'Usuário ou senha incorretos!';
+            }
+            return array('status' => $status, 'ok' => $ok, 'message' => $message);
+        }
+        public function echoLogin($user, $password, $type = 'admin') {
+            echo json_encode($this->login($user, $password, $type));
+        }
+
+        // Do logout
+        public function logout() {
+            session_destroy();
+            $status = '200';
+            $ok = true;
+            $message = 'Logout realizado com sucesso!';
+            return array('status' => $status, 'ok' => $ok, 'message' => $message);
+        }
+        public function echoLogout() {
+            echo json_encode($this->logout());
+        }
+
+        // Get type of user
+        public function getCurrentUser() {
+            if(isset($_SESSION['user'])) {
+                $status = '200';
+                $ok = true;
+                $message = 'Tipo de usuário encontrado!';
+                $user = array(
+                    'user' => $_SESSION['user'],
+                    'type' => $_SESSION['type']
+                );
+            } else {
+                $status = 'Failed';
+                $ok = false;
+                $message = 'Tipo de usuário não encontrado!';
+                $type = '';
+            }
+            return array('status' => $status, 'ok' => $ok, 'message' => $message, 'user' => $user);
+        }
+        public function echoCurrentUser() {
+            echo json_encode($this->getCurrentUser());
+        }
+
+        public function lancarNotaAluno($id_aluno, $id_turma, $avaliacao1, $avaliacao2, $avaliacao3, $frequencia) {
+            $sql = "UPDATE alunos_turmas SET avaliacao1 = :avaliacao1, avaliacao2 = :avaliacao2, avaliacao3 = :avaliacao3, frequencia = :frequencia WHERE id_aluno = :id_aluno AND id_turma = :turma;";
+            $query = $this->conn->prepare($sql);
+            $query->bindValue(':id_aluno', $id_aluno);
+            $query->bindValue(':turma', $id_turma);
+            $query->bindValue(':avaliacao1', $avaliacao1);
+            $query->bindValue(':avaliacao2', $avaliacao2);
+            $query->bindValue(':avaliacao3', $avaliacao3);
+            $query->bindValue(':frequencia', $frequencia);
+            if($query->execute()) {
+                $status = '201';
+                $ok = true;
+                $message = 'Nota lançada com sucesso!';
+            } else {
+                $status = 'Failed';
+                $ok = false;
+                $message = 'Houve algum erro ao lançar a nota!';
+            }
+            return array('status' => $status, 'ok' => $ok, 'message' => $message);
+        }
+        public function echoLancarNotaAluno($id_aluno, $id_turma, $avaliacao1, $avaliacao2, $avaliacao3, $frequencia) {
+            echo json_encode($this->lancarNotaAluno($id_aluno, $id_turma, $avaliacao1, $avaliacao2, $avaliacao3, $frequencia));
+        }
+
+        // Get the grades and frequency of a student
+        public function getNotasAluno($id_aluno, $id_turma) {
+            $sql = "SELECT * FROM alunos_turmas WHERE id_aluno = :id_aluno AND id_turma = :id_turma;";
+            $query = $this->conn->prepare($sql);
+            $query->bindValue(':id_aluno', $id_aluno);
+            $query->bindValue(':id_turma', $id_turma);
+            if($query->execute()) {
+                $status = '200';
+                $ok = true;
+                $message = 'Notas encontradas!';
+                $notas = $query->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                $status = 'Failed';
+                $ok = false;
+                $message = 'Houve algum erro ao buscar as notas!';
+                $notas = array();
+            }
+            return array('status' => $status, 'ok' => $ok, 'message' => $message, 'notas' => $notas);
+        }
+        public function echoGetNotasAluno($id_aluno, $id_turma) {
+            echo json_encode($this->getNotasAluno($id_aluno, $id_turma));
         }
 
         // INSERÇÃO NO BANCO: qual tabela e o array de dados para inserir
@@ -39,7 +183,6 @@
 
             return array('status' => $status, 'message' => $message);
         }
-
         public function insertEcho($table, $data) {
             echo json_encode($this->insert($table, $data));
         }
@@ -157,6 +300,12 @@
         public function echoDataNotLinked($otherTable, $relationTable, $relationTableMainColumn, $relationTableOtherColumn, $mainId) {
             echo json_encode($this->getDataNotLinked($otherTable, $relationTable, $relationTableMainColumn, $relationTableOtherColumn, $mainId));
         }
+
+        public function updateAvaliacoesEFrequencias($id_aluno, $id_turma, $data){
+            
+        }
+        
+        
 
         public function deleteDataById($table, $id) {
             $sql = "DELETE FROM $table WHERE id = :id;";

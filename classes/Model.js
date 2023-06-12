@@ -20,14 +20,42 @@ class HttpClient {
         this.navigateTo = navigateTo
         this.updateRoute = updateRoute
         this.params = this.getParams()
+        //this.api_url = '../../classes/api.php'
+        this.api_url = 'http://localhost/siscad/classes/api.php'
+
+        // Verify login
+        this.verifyLogin()
+        .then(data => {
+            // if in login screen, do nothing
+            if(location.href.includes('login')) return
+            if(!data.ok) {
+                this.navigateTo('login')
+                this.updateRoute('login')
+            }
+        })
+
     }
 
     requiredSelects = {}
 
     params = {}
 
+    // Set of permissions of each menu item
+    permissions = {
+        'alunos': ['minhas_notas_e_presencas', 'meu_perfil'],
+        'professores': ['lancar_notas_e_presencas', 'meu_perfil', 'alunos'],
+        'secretaria': ['cursos', 'disciplinas', 'turmas'],
+        'rh': ['alunos, professores'],
+        'admin': ['cursos', 'disciplinas', 'turmas', 'alunos', 'professores', 'lancar_notas_e_presencas', 'minhas_notas_e_presencas', 'meu_perfil',]
+    }
+
+    getPermissions(type = 'admin') {
+        return this.permissions[type]
+    }
+
     getParams() {
         console.log('rota ' + location.href)
+        if(!location.href.includes('?')) return
         location.href.split('?')[1].split('&').map((param) => {
             console.log(param)
             let [key, value] = param.split('=')
@@ -92,9 +120,64 @@ class HttpClient {
         })
     }
 
+    verifyLogin() {
+        const fd = new FormData()
+        let body = {'action': 'verifyLogin'}
+        fd.append('data', JSON.stringify(body))
+        return fetch(this.api_url, {
+            method: 'POST',
+            body: fd
+        })
+        .then(response => response.json())
+        .then(data => {
+            /* if(!data.ok) {
+                this.navigateTo('login')
+                this.updateRoute('login')
+            } */
+            console.log(data)
+            return data
+        })
+    }
+
+    getCurrentUser() {
+        const fd = new FormData()
+        let body = {'action': 'getCurrentUser'}
+        fd.append('data', JSON.stringify(body))
+        return fetch(this.api_url, {
+            method: 'POST',
+            body: fd
+        })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+    }
+
+    logout() {
+        const fd = new FormData()
+        let body = {'action': 'logout'}
+        fd.append('data', JSON.stringify(body))
+        return fetch(this.api_url, {
+            method: 'POST',
+            body: fd
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            if(data.ok) {
+                this.navigateTo('login')
+                this.updateRoute('login')
+            }
+            return data
+        })
+    }
+
     getAll(url = this.baseUrl) {
         return fetch(url)
         .then(response => response.json())
+        .then(data => {
+            return data
+        })
     }
 
     async getNameById(table, id){
@@ -237,7 +320,7 @@ class HttpClient {
                     let bodyFd = new FormData()
                     bodyFd.append('data', JSON.stringify(body))
                     
-                    fetch('../../classes/api.php', {
+                    fetch(this.api_url, {
                         method: 'POST',
                         body: bodyFd
                     })
@@ -325,6 +408,7 @@ class HttpClient {
                 if(linkToDetails) {
                     const openDetailsPage = (id) => {
                         this.navigateTo(`visualizar_${getSingularName(linkToDetails)}`, {id: id})
+                        this.updateRoute(`visualizar_${getSingularName(linkToDetails)}`, {id: id})
                     }
                     tr.addEventListener('click', e => {
                         openDetailsPage(tr.getAttribute('rowId'))
@@ -389,7 +473,7 @@ class HttpClient {
         let bodyFd = new FormData()
         bodyFd.append('data', JSON.stringify(body))
         
-        fetch('../../classes/api.php', {
+        fetch(this.api_url, {
             method: 'POST',
             body: bodyFd
         })
@@ -452,7 +536,7 @@ class HttpClient {
             let bodyLinkFd = new FormData()
             bodyLinkFd.append('data', JSON.stringify(bodyLink))
     
-            fetch('../../classes/api.php',{
+            fetch(this.api_url,{
                 method: 'POST',
                 body: bodyLinkFd
             })
@@ -498,7 +582,7 @@ class HttpClient {
                         }
                         let linkFd = new FormData()
                         linkFd.append('data', JSON.stringify(body))
-                        fetch('../../classes/api.php', {
+                        fetch(this.api_url, {
                             method: 'POST',
                             body: linkFd
                         })
@@ -637,7 +721,7 @@ class HttpClient {
         const bodyFd = new FormData()
         bodyFd.append('data', JSON.stringify(body))
 
-        return fetch('../../classes/api.php', {
+        return fetch(this.api_url, {
             method: 'POST',
             body: bodyFd
         })
@@ -652,7 +736,7 @@ class HttpClient {
         const bodyFd = new FormData()
         bodyFd.append('data', JSON.stringify(body))
 
-        return fetch('../../classes/api.php', {
+        return fetch(this.api_url, {
             method: 'POST',
             body: bodyFd
         })
@@ -672,7 +756,7 @@ class HttpClient {
         const bodyFd = new FormData()
         bodyFd.append('data', JSON.stringify(body))
 
-        return fetch('../../classes/api.php', {
+        return fetch(this.api_url, {
             method: 'POST',
             body: bodyFd
         })
@@ -695,7 +779,7 @@ class HttpClient {
         let bodyFd = new FormData()
         bodyFd.append('data', JSON.stringify(body))
         
-        return fetch('../../classes/api.php', {
+        return fetch(this.api_url, {
             method: 'POST',
             body: bodyFd
         })
@@ -714,7 +798,7 @@ class HttpClient {
         let bodyFd = new FormData()
         bodyFd.append('data', JSON.stringify(body))
         
-        return fetch('../../classes/api.php', {
+        return fetch(this.api_url, {
             method: 'POST',
             body: bodyFd
         })
@@ -730,7 +814,7 @@ class HttpClient {
         let bodyFd = new FormData()
         bodyFd.append('data', JSON.stringify(body))
         
-        return fetch('../../classes/api.php', {
+        return fetch(this.api_url, {
             method: 'POST',
             body: bodyFd
         })
@@ -746,7 +830,24 @@ class HttpClient {
         let bodyFd = new FormData()
         bodyFd.append('data', JSON.stringify(body))
         
-        return fetch('../../classes/api.php', {
+        return fetch(this.api_url, {
+            method: 'POST',
+            body: bodyFd
+        })
+        .then(response => response.json())
+    }
+
+    APIupdateAvaliacoesEFrequencias(id_aluno, id_turma, data){
+        let body = {
+            'action': 'updateAvaliacoesEFrequencias',
+            'id_aluno': id_aluno,
+            'id_turma': id_turma,
+            'data': JSON.stringify(data)
+        }
+        let bodyFd = new FormData()
+        bodyFd.append('data', JSON.stringify(body))
+        
+        fetch(this.api_url, {
             method: 'POST',
             body: bodyFd
         })
@@ -809,6 +910,22 @@ class HttpClient {
                 let option = document.createElement('option')
                 option.value = table.id
                 option.innerHTML = table.nome
+                select.appendChild(option)
+            })
+        })
+    }
+
+    // Using API
+    APIfillSelectByData(dataPromise, id, columnsToShow = ['nome']) {
+        const select = document.getElementById(id)
+        if(!select) return
+
+        dataPromise
+        .then(data => {
+            data.forEach((table)=>{
+                let option = document.createElement('option')
+                option.value = table.id
+                columnsToShow.forEach(column => {option.innerHTML += ` ${table[column]}`})
                 select.appendChild(option)
             })
         })

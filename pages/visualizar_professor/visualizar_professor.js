@@ -62,7 +62,5 @@ visualizarProfessor.createAndFillTable(dataPromiseDetail, ['#', 'Nome', 'Endere√
 
 visualizarProfessor.generateLinkedTurmasTable()
 
-
-// Callback function to link items
 visualizarProfessor.generateUnlinkedListTurmas()
 // ------------------------------

@@ -12,8 +12,33 @@
         $data = json_decode($data);
 
         switch ($data->action) {
+
+            case 'verifyLogin':
+                $api->echoVerifyLogin();
+                break;
+
+            case 'login':
+                $api->echoLogin($data->user, $data->password, $data->type);
+                break;
+
+            case 'logout':
+                $api->echoLogout();
+                break;
+
+            case 'getCurrentUser':
+                $api->echoCurrentUser();
+                break;
+
             case 'insert':
                 $api->insertEcho($data->table, $data->data);
+                break;
+
+            case 'lancarNotaAluno':
+                $api->echoLancarNotaAluno($data->id_aluno, $data->id_turma, $data->avaliacao1, $data->avaliacao2, $data->avaliacao3, $data->frequencia);
+                break;
+
+            case 'getNotasAluno':
+                $api->echoGetNotasAluno($data->id_aluno, $data->id_turma);
                 break;
 
             case 'echoAll':
@@ -55,6 +80,17 @@
             case 'deleteDataById':
                 $api->echoDeleteDataById($data->table, $data->id);
                 break;
+
+            /*case 'updateRelationData':
+                $otherTable = $data->otherTable;
+                $relationTable = $data->relationTable;
+                $relationTableMainColumn = $data->relationTableMainColumn;
+                $relationTableOtherColumn = $data->relationTableOtherColumn;
+                $mainId = $data->mainId;
+                $otherId = $data->otherId;
+
+                $api->echoUpdateRelationData($otherTable, $relationTable, $relationTableMainColumn, $relationTableOtherColumn, $mainId, $otherId);
+                break; */
 
             case 'echoTurmasFromProfessor':
                 //$data = json_decode($data);
