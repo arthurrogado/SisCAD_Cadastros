@@ -95,6 +95,7 @@ iframe {
     border-radius: 6px;
 }
 
+.input-field input:disabled ~ label,
 .input-field input:valid ~ label,
 .input-field input:focus ~ label,
 .input-field textarea:valid ~ label,

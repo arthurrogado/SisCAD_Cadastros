@@ -1,0 +1,40 @@
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../../css/style.css">
+
+<h1>Minhas notas e frequências</h1>
+<div id="avaliacoes_e_frequencia">
+    <form class="form">
+        
+        <div class="input-group">
+            
+            <div class="input-field">
+                <select name="id_turma" id="id_turma" required>
+                    <option value="">~ Selecione a turma do aluno</option>
+                </select>
+            </div>
+            
+            <div class="input-field">
+                <input type="text" name="frequencia" id="frequencia" required disabled>
+                <label for="frequencia">Frequência</label>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <div class="input-field">
+                <input type="number" name="avaliacao1" id="avaliacao1" required disabled>
+                <label for="avaliacao1">Avaliação 1</label>
+            </div>
+            <div class="input-field">
+                <input type="number" name="avaliacao2" id="avaliacao2" required disabled>
+                <label for="avaliacao2">Avaliação 2</label>
+            </div>
+            <div class="input-field">
+                <input type="number" name="avaliacao3" id="avaliacao3" required disabled>
+                <label for="avaliacao3">Nota final</label>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script type="module" src="./minhas_notas_e_frequencias.js"></script>

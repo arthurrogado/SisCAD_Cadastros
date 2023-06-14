@@ -12,6 +12,15 @@
             $this->conn = $conn;
         }
 
+        // get user id from table
+        public function getIdFromUser($table, $user) {
+            $query = "SELECT id FROM $table WHERE usuario = '$user'";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['id'];
+        }
+
         //Verifica se o usuário está logado
         public function verifyLogin() {
             if(!isset($_SESSION['user'])) {
@@ -30,7 +39,7 @@
         }
 
         // Do login
-        public function login($user, $password, $type = 'admin') {
+        public function oldLogin($user, $password, $type = 'admin') {
             // $type can be: aluno, professor, rh, secretaria, admin
             if($user == 'admin' && $password == 'admin') {
                 $status = '200';
@@ -38,12 +47,13 @@
                 $message = 'Login realizado com sucesso!';
                 $_SESSION['user'] = $user;
                 $_SESSION['type'] = $type;
-            } else if ($user == 'professor' && $password == 'professor') {
+            } else if ($user == 'lynwood' && $password == 'professor') {
                 $status = '200';
                 $ok = true;
                 $message = 'Login realizado com sucesso!';
                 $_SESSION['user'] = $user;
                 $_SESSION['type'] = $type;
+                $_SESSION['user_id'] = $this->getIdFromUser('professores', $user);
             } else if ($user == 'aluno' && $password == 'aluno') {
                 $status = '200';
                 $ok = true;
@@ -69,6 +79,47 @@
             }
             return array('status' => $status, 'ok' => $ok, 'message' => $message);
         }
+        public function login($user, $password, $type) {
+            if(in_array($type, ['professores', 'alunos', 'secretaria', 'rh']) ) {
+                // get password hash from database by user
+                $sql = "SELECT senha FROM $type WHERE usuario = '$user'";
+                $query = $this->conn->prepare($sql);
+                if($query->execute()) {
+                    $result = $query->fetch(PDO::FETCH_OBJ);
+                    $hash = $result->senha;
+                    // verify password
+                    if(password_verify($password, $hash)) {
+                        $status = '200';
+                        $ok = true;
+                        $message = 'Login realizado com sucesso!';
+                        $_SESSION['user'] = $user;
+                        $_SESSION['type'] = $type;
+                        $_SESSION['user_id'] = $this->getIdFromUser($type, $user);
+                    } else {
+                        $status = 'Failed';
+                        $ok = false;
+                        $message = 'Usuário ou senha incorretos!';
+                    }
+                    return array('status' => $status, 'ok' => $ok, 'message' => $message);
+                } else {
+                    $status = 'Failed';
+                    $ok = false;
+                    $message = 'Erro ao executar a query!';
+                    return array('status' => $status, 'ok' => $ok, 'message' => $message);
+                }
+            }
+
+
+            if($user == 'admin' && $password == 'admin') {
+                $status = '200';
+                $ok = true;
+                $message = 'Login realizado com sucesso!';
+                $_SESSION['user'] = $user;
+                $_SESSION['type'] = $type;
+                $_SESSION['user_id'] = 1;
+                return array('status' => $status, 'ok' => $ok, 'message' => $message);
+            }
+        }
         public function echoLogin($user, $password, $type = 'admin') {
             echo json_encode($this->login($user, $password, $type));
         }
@@ -93,7 +144,8 @@
                 $message = 'Tipo de usuário encontrado!';
                 $user = array(
                     'user' => $_SESSION['user'],
-                    'type' => $_SESSION['type']
+                    'type' => $_SESSION['type'],
+                    'user_id' => $_SESSION['user_id']
                 );
             } else {
                 $status = 'Failed';

@@ -22,10 +22,7 @@ class ClasseVisualizarAluno extends HttpClient {
         }
         // Table TURMAS
         const dataPromiseTurmas = visualizarAluno.APIgetDataFromRelation('turmas', 'alunos_turmas', 'id_aluno', visualizarAluno.params.id, 'id_turma')
-        dataPromiseTurmas.then(data => {
-            console.log('dataPromiseTurmas')
-            console.log(data)
-        })
+
         // Function do delete link to turma
         const tabelaTurmas = visualizarAluno.createAndFillTable(dataPromiseTurmas, ['ID Turma', 'Nome', 'Ano', 'X'], false, 'dataTable', ['id', 'nome', 'ano'], cbDeleteAlunoTurma, selectorWhereInsert)
     }
@@ -110,7 +107,7 @@ class ClasseVisualizarAluno extends HttpClient {
 
 const visualizarAluno = new ClasseVisualizarAluno('./visualizar_aluno.php')
 const dataPromiseAluno = visualizarAluno.APIgetDataById('alunos', visualizarAluno.params.id)
-visualizarAluno.createAndFillTable(dataPromiseAluno, ['#', 'Nome', 'Endereço', 'Telefone', 'Curso'], false, 'detailTable', null, false, "#details")
+visualizarAluno.createAndFillTable(dataPromiseAluno, ['#', 'Nome', 'Endereço', 'Telefone', 'Curso'], false, 'detailTable', ['id', 'nome', 'endereco', 'telefone', 'curso'], false, "#details")
 
 const dataPromiseAlunosTurmas = visualizarAluno.APIgetDataFromRelation('turmas', 'alunos_turmas', 'id_aluno', visualizarAluno.params.id, 'id_turma')
 visualizarAluno.APIfillSelectByData(dataPromiseAlunosTurmas, 'id_turma', ['nome', 'ano'])

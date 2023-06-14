@@ -57,7 +57,7 @@ const visualizarProfessor = new ClasseVisualizarProfessor('./visualizar_professo
 
 // Table DETAILS
 const dataPromiseDetail = visualizarProfessor.APIgetDataById('professores', visualizarProfessor.params.id)
-visualizarProfessor.createAndFillTable(dataPromiseDetail, ['#', 'Nome', 'Endereço', 'Telefone', 'Titulação'], false, 'detailTable', null, false, "#details")
+visualizarProfessor.createAndFillTable(dataPromiseDetail, ['#', 'Nome', 'Endereço', 'Telefone', 'Titulação'], false, 'detailTable', ['id', 'nome', 'endereco', 'telefone', 'titulacao'], false, "#details")
 
 
 visualizarProfessor.generateLinkedTurmasTable()

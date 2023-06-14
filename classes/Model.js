@@ -1,6 +1,7 @@
 import { navigateTo, updateRoute } from "../js/functions.js"
 
 function getSingularName(name) {
+    if (typeof name !== 'string') return name
     if(name.slice(-2) === 'es') {
         return name.slice(0, -2)
     }
@@ -42,11 +43,11 @@ class HttpClient {
 
     // Set of permissions of each menu item
     permissions = {
-        'alunos': ['minhas_notas_e_presencas', 'meu_perfil'],
-        'professores': ['lancar_notas_e_presencas', 'meu_perfil', 'alunos'],
-        'secretaria': ['cursos', 'disciplinas', 'turmas'],
-        'rh': ['alunos, professores'],
-        'admin': ['cursos', 'disciplinas', 'turmas', 'alunos', 'professores', 'lancar_notas_e_presencas', 'minhas_notas_e_presencas', 'meu_perfil',]
+        'alunos': ['minhas_notas_e_frequencias', 'meu_perfil'],
+        'professores': ['lancar_notas_e_frequencias', 'meu_perfil'],
+        'secretaria': ['cursos', 'disciplinas', 'turmas', 'alunos'],
+        'rh': ['alunos','professores'],
+        'admin': ['cursos', 'disciplinas', 'turmas', 'alunos', 'professores', 'lancar_notas_e_frequencias', 'minhas_notas_e_frequencias', 'meu_perfil',]
     }
 
     getPermissions(type = 'admin') {
@@ -420,15 +421,12 @@ class HttpClient {
         // Check if dataPromise is a promise, if it is resolve then make foreach, if not make foreach
         let dataToUse
         if(dataPromise instanceof Promise) {
-            console.log('É PROMISE')
             dataPromise
             .then(data => {
                 dataToUse = data
-                console.log('dataToUse ', dataToUse)
                 makeLoop(dataToUse)
             })
         } else {
-            console.log('NÃO É PROMISE')
             dataToUse = dataPromise
             makeLoop(dataToUse)
         }
@@ -916,19 +914,32 @@ class HttpClient {
     }
 
     // Using API
-    APIfillSelectByData(dataPromise, id, columnsToShow = ['nome']) {
-        const select = document.getElementById(id)
+    APIfillSelectByData(dataPromise, select_id, columnsToShow = ['nome']) {
+        const select = document.getElementById(select_id)
         if(!select) return
 
-        dataPromise
-        .then(data => {
-            data.forEach((table)=>{
+        // if dataPromise is a instance of Promise, then wait for it to be resolved
+        if(dataPromise instanceof Promise) {
+            dataPromise
+            .then(data => {
+                data.forEach((table)=>{
+                    let option = document.createElement('option')
+                    option.value = table.id
+                    columnsToShow.forEach(column => {option.innerHTML += ` ${table[column]}`})
+                    select.appendChild(option)
+                })
+            })
+        }
+        // if dataPromise is not a instance of Promise, then use it as data
+        else {
+            dataPromise.forEach((table)=>{
                 let option = document.createElement('option')
                 option.value = table.id
                 columnsToShow.forEach(column => {option.innerHTML += ` ${table[column]}`})
                 select.appendChild(option)
             })
-        })
+        }
+
     }
 
 }

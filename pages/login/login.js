@@ -17,8 +17,8 @@ class ClasseLogin extends HttpClient {
             let fd = new FormData()
             let body = {
                 'action': 'login',
-                'user': dataFd.get('user'),
-                'password': dataFd.get('password'),
+                'usuario': dataFd.get('usuario'),
+                'senha': dataFd.get('senha'),
                 'type': dataFd.get('type')
             }
             fd.append('data', JSON.stringify(body))
@@ -32,6 +32,8 @@ class ClasseLogin extends HttpClient {
                 console.log(data)
                 if(data.ok) {
                     //showItemsByPermission()
+                    // reload page
+                    window.location.reload()
                 }
             })
 

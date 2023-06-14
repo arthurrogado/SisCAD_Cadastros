@@ -9,7 +9,7 @@
 
         public function insertProfessorAndLinkToCurso($dataProfessor, $ids_cursos){
             $this->conn->beginTransaction();
-            $insertProfessor = $this->insert('professores', $dataProfessor);
+            $insertProfessor = $this->insert('professores', json_encode($dataProfessor));
 
             if($insertProfessor['status'] == '201'){
 

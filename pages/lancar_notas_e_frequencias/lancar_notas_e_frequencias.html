@@ -1,0 +1,50 @@
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../../css/style.css">
+
+<h1>Minhas turmas</h1>
+<div id="minhas-turmas"></div>
+
+<h1>Lançar notas e presenças</h1>
+<div id="lancar-notas">
+    <form class="form">
+        
+        <div class="input-group">
+            <div class="input-field">
+                <select name="id_turma" id="id_turma" required>
+                    <option value="">~ Selecione a turma do aluno</option>
+                </select>
+            </div>
+            <div class="input-field">
+                <select name="id_aluno" id="id_aluno" required>
+                    <option value="">~ Selecione o aluno</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <div class="input-field">
+                <input type="text" name="frequencia" id="frequencia" required>
+                <label for="frequencia">Frequência</label>
+            </div>
+            <div class="input-field">
+                <input type="number" name="avaliacao1" id="avaliacao1" required>
+                <label for="avaliacao1">Avaliação 1</label>
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <div class="input-field">
+                <input type="number" name="avaliacao2" id="avaliacao2" required>
+                <label for="avaliacao2">Avaliação 2</label>
+            </div>
+            <div class="input-field">
+                <input type="number" name="avaliacao3" id="avaliacao3" required>
+                <label for="avaliacao3">Nota final</label>
+            </div>
+        </div>
+
+        <input type="submit" value="Lançar">
+    </form>
+</div>
+
+<script type="module" src="lancar_notas_e_frequencia.js"></script>

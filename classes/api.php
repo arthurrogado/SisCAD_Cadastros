@@ -18,7 +18,7 @@
                 break;
 
             case 'login':
-                $api->echoLogin($data->user, $data->password, $data->type);
+                $api->echoLogin($data->usuario, $data->senha, $data->type);
                 break;
 
             case 'logout':
