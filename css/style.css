@@ -1,3 +1,10 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
 button, input[type="button"], input[type="submit"], input[type="reset"], select {
     border: none;
     background: none;
@@ -130,6 +137,20 @@ iframe {
 
 .dataTable tr:nth-child(2n) {
     background-color: #ccc;
+}
+
+/* SEARCH BAR */
+.search {
+    width: 100%;
+    margin: 0;
+}
+
+.search > input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+    border-radius: 10px;
 }
 
 

@@ -33,7 +33,7 @@ class ClasseLogin extends HttpClient {
                 if(data.ok) {
                     //showItemsByPermission()
                     // reload page
-                    window.location.reload()
+                    document.parentElement.window.location.reload()
                 }
             })
 

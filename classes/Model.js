@@ -237,15 +237,7 @@ class HttpClient {
     }
 
 
-    // Generic tables ---------------------------------------------------------
 
-    createAndFillDatatable() {
-
-    }
-
-    createAndFillDetailtable() {
-
-    }
 
     /* async createAndFillTable(dataPromise, headers = null, linkToDetails = false , tableClass = 'dataTable', deleteButton = false) {
         let contentTable = document.createElement('table')
@@ -351,7 +343,7 @@ class HttpClient {
 
 
     
-    createAndFillTable(dataPromise, headers = null, linkToDetails = false , tableClass = 'dataTable', columnsToShow = null, deleteCallbackFunction, selectorWhereInsert = 'body') {
+    createAndFillTable(dataPromise, headers = null, linkToDetails = false , tableClass = 'dataTable', columnsToShow = null, deleteCallbackFunction, selectorWhereInsert = 'body', search = false) {
         let contentTable = document.createElement('table')
         let tableHead = document.createElement('thead')
         let tableBody = document.createElement('tbody')
@@ -429,6 +421,33 @@ class HttpClient {
         } else {
             dataToUse = dataPromise
             makeLoop(dataToUse)
+        }
+
+        // if there is a search bar, create it
+        if(search) {
+            console.log('=-=-=-=- SEARCH')
+            let searchDiv = document.createElement('div')
+            searchDiv.classList.add('search')
+            let searchInput = document.createElement('input')
+            searchInput.setAttribute('placeholder', 'Pesquisar')
+            searchDiv.appendChild(searchInput)
+            console.log(searchDiv)
+            contentTable.insertAdjacentElement('beforebegin', searchDiv)
+
+            searchInput.addEventListener('keyup', e => {
+                let trs = document.querySelectorAll("tbody tr")
+                trs.forEach((tr) => {
+                    if(e.target.value == ""){
+                        tr.style.display = "table-row"
+                    }
+                    let inclui = tr.textContent.toLowerCase().includes(e.target.value.toLowerCase())
+                    if(!inclui){
+                        tr.style.display = "none"
+                    } else {
+                        tr.style.display = "table-row"
+                    }
+                })
+            })
         }
 
         return contentTable
@@ -626,7 +645,7 @@ class HttpClient {
         document.querySelector(selectorWhereInsert).innerHTML = ''
         document.querySelector(selectorWhereInsert).appendChild(totalDivSearch)
 
-        totalDivSearch.style.border = '1px solid red'
+        //totalDivSearch.style.border = '1px solid red'
 
         const listSearch = document.createElement('div')
         listSearch.classList.add('listTable')
@@ -726,7 +745,7 @@ class HttpClient {
         .then(response => response.json())
     }
 
-    async APIgetDataByTable(table) {
+    APIgetDataByTable(table) {
         const body = {
             'action': 'getDataByTable',
             'table': table

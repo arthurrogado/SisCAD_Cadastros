@@ -5,6 +5,7 @@ function teste() {
 }
 
 function makeUrlParams(params) {
+    // this function receives an object and returns a string with the parameters
     let urlParams = params ? '?' : ''
     for(let param in params) {
         urlParams += `${param}=${params[param]}&`

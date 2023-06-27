@@ -54,3 +54,27 @@ const config = {
 
 
 listagemTurmas.placeAllReplacingName('./listagem_turmas.php', config);
+
+// function to transform numeros into dias da semana
+function transformDias(dias) {
+    const dias_semana = {
+        '2': 'Segunda-feira',
+        '3': 'Terça-feira',
+        '4': 'Quarta-feira',
+        '5': 'Quinta-feira',
+        '6': 'Sexta-feira',
+        '7': 'Sábado'
+    }
+    return dias.split(',').map((el) => dias_semana[el]).join(', ')
+}
+
+listagemTurmas.getAll()
+.then(turmas => {
+    console.log('***** TURMAS', turmas)
+    // iterate turmas, for each turma, transform dias_semana into dias da semana
+    turmas.forEach(turma => {
+        turma.dias_semana = transformDias(turma.dias_semana)
+    })
+
+    listagemTurmas.createAndFillTable(turmas, ['#', 'Nome turma', 'Curso', 'Período', 'Dias da semana', 'Turno'], 'turmas', 'dataTable', ['id', 'nome', 'id_curso', 'periodo', 'dias_semana', 'turno'], null, 'body', true)
+})

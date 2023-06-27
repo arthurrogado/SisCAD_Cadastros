@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <table class="dataTable">
+        <div class="search">
+            <input type="text" name="search" placeholder="Pesquisar">
+        </div>
+
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nome turma</th>
+                <th>Curso</th>
+                <th>Período</th>
+                <th>Ano</th>
+                <th>Semestre</th>
+                <th>Dias</th>
+                <th>Turno</th>
+            </tr>
+        </thead>
+
+
+
+        <tbody>
+
+            <tr>
+                <td>13</td>
+                <td>Primeira turma</td>
+                <td>ADS - Análise e Desenvolvimento de Sistemas</td>
+                <td>1</td>
+                <td>2008</td>
+                <td>1</td>
+                <td>Segunda-feira, Terça-feira, Quarta-feira, Quinta-feira</td>
+                <td>noturno</td>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td>Outra turma de eng</td>
+                <td>Engenharia Civil</td>
+                <td>2</td>
+                <td>2022</td>
+                <td>3</td>
+                <td>Segunda-feira, Terça-feira, Sexta-feira</td>
+                <td>vespertino</td>
+            </tr>
+            <tr>
+                <td>17</td>
+                <td>Saboneteiros</td>
+                <td>Licenciatura em Química</td>
+                <td>3</td>
+                <td>2011</td>
+                <td>6</td>
+                <td>Segunda-feira, Terça-feira, Quarta-feira, Sexta-feira</td>
+                <td>noturno</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+
+</html>
+
+<script>
+    var searchBar = document.querySelector(".search input")
+
+    searchBar.addEventListener('keypress', (e) => {
+        let trs = document.querySelectorAll("tbody tr")
+        trs.forEach((tr) => {
+            if(e.target.value == ""){
+                tr.style.display = "table-row"
+            }
+            let inclui = tr.textContent.toLowerCase().includes(e.target.value.toLowerCase())
+            if(!inclui){
+                tr.style.display = "none"
+            } else {
+                tr.style.display = "table-row"
+            }
+        })
+    })
+</script>
